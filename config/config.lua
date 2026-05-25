@@ -1,20 +1,22 @@
 ---@class vorp_inventory_config
-CONFIG                                   = CONFIG or {}
+CONFIG                     = CONFIG or {}
 
-CONFIG.LANGUAGE                          = "English"
+CONFIG.LANGUAGE            = "English"
 
-CONFIG.DEV_MODE                          = false   -- If your server is live set this to false
+CONFIG.DEV_MODE            = false   -- If your server is live set this to false
 
-CONFIG.PUSH_TO_TALK                      = true    -- enable PTT while inventory is open
+CONFIG.PUSH_TO_TALK        = true    -- enable PTT while inventory is open
 
-CONFIG.INV_ORDER                         = "items" -- "items" or "weapons" what displays at the top of the inventory
+CONFIG.INV_ORDER           = "items" -- "items" or "weapons" what displays at the top of the inventory
 
-CONFIG.WALK_WHILE_INV_OPEN               = true    -- If true, the player can walk while the inventory is open as long they hold W key
+CONFIG.WALK_WHILE_INV_OPEN = true    -- If true, the player can walk while the inventory is open as long they hold W key
 
-CONFIG.SHOW_PLAYER_NAME                  = false   -- When giving an item, show the character name of nearby players instead of their player ID
+CONFIG.SHOW_PLAYER_NAME    = false   -- When giving an item, show the character name of nearby players instead of their player ID
+
 
 -- WEAPON CONFIGURATION
-CONFIG.REMOVE_LASSO                      = true -- If true, the lasso will be removed when player hogties someone, only works if MANUAL_WEAPON_RELOAD is true
+-- currently THIS is only working for NPCS
+CONFIG.REMOVE_LASSO                      = true -- If true, the lasso will be removed when player hogties an NPC, only works if MANUAL_WEAPON_RELOAD is true
 
 CONFIG.DISABLE_HIP_FIRE                  = true -- If true, DISABLES hip fire and players must aim to shoot
 
@@ -43,7 +45,7 @@ CONFIG.EQUIP_WEAPONS                     = {
 }
 -------------------------
 ----- if you have a weapons script you might have to modify it to work with vorp_inventory, or disable this feature
------ by default works with vorp weapons
+----- by default works will  with vorp weapons
 CONFIG.USE_WEAPON_COMPONENTS             = false                  -- if true inventory will allow you to use weapon attachements and will load attachements saved in the database
 
 CONFIG.USE_WEAPON_DEGRADATION            = true                   -- If true, the weapon degradation will be used meaning you can inspect and clean it, and weapon stats will be saved across restarts
