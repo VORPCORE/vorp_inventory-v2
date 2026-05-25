@@ -90,9 +90,7 @@ end)
 
 local InventoryAPI = {
 	MAIN = {
-
 		--||||||||||| ITEMS |||||||||||--
-
 		REMOVE_ALL_ITEMS = function(source, cb)
 			local character <const> = CORE.getUser(source)?.getUsedCharacter
 			if not character then return respond(cb, false) end
@@ -1361,7 +1359,7 @@ local InventoryAPI = {
 						sourceCharId, true)
 
 					if (weight + itemsToTalWeight + sourceTotalWeaponWeight) > invCapacity then
-						CORE.NotifyRightTip(_source, "inventory full", 2000)
+						CORE.NotifyRightTip(_source, LANG.fullInventory, 2000)
 						return respond(cb, false)
 					end
 

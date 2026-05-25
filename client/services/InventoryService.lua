@@ -380,7 +380,7 @@ local inventory <const> = {
 		else
 			giveLabel = "something"
 		end
-		CORE.NotifyObjective("Someone wants to give you something", 5000)
+		CORE.NotifyObjective(LANG.someoneWantsToGiveYouSomething, 5000)
 
 		local timeoutMs <const> = 5000
 		local timer <const> = GetGameTimer()

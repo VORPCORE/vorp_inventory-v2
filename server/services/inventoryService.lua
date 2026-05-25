@@ -259,7 +259,7 @@ local InventoryService <const> = {
 
 		ASK_TO_GIVE_ITEMS = function(source, target, data)
 			if BEING_ASKED[target] or BEING_ASKED[source] then
-				CORE.NotifyRightTip(source, "Player is already being asked to give items, just wait", 5000)
+				CORE.NotifyRightTip(source, LANG.playerAlreadyBeingAsked, 5000)
 				return false
 			end
 			BEING_ASKED[target] = true
@@ -300,7 +300,7 @@ local InventoryService <const> = {
 			SV_UTILS.PROCESS.ADD_USER(_source)
 
 			if BEING_ASKED[target] then
-				return CORE.NotifyRightTip(_source, "Player is already being asked to give items, just wait a bit", 5000)
+				return CORE.NotifyRightTip(_source, LANG.playerAlreadyBeingAsked, 5000)
 			end
 
 			if not INVENTORY_SERVICE.GIVE.ASK_TO_GIVE_ITEMS(_source, target, { type = "item_money", amount = amount }) then
@@ -576,7 +576,7 @@ local InventoryService <const> = {
 
 			if not INVENTORY_SERVICE.GIVE.ASK_TO_GIVE_ITEMS(_source, target, { type = "item_standard", itemName = itemName, itemCount = amount }) then
 				SV_UTILS.PROCESS.REMOVE_USER(_source)
-				CORE.NotifyRightTip(_source, "Player rejected the request", 5000)
+				CORE.NotifyRightTip(_source, LANG.playerRejectedRequest, 5000)
 				return
 			end
 
@@ -676,7 +676,7 @@ local InventoryService <const> = {
 
 			-- check if ammount is allowed
 			if amount > SHARED_DATA.MAX_AMMO[ammotype] then
-				return CORE.NotifyRightTip(_source, "amount requested is greater than max allowed", 2000)
+				return CORE.NotifyRightTip(_source, LANG.amountGreaterThanMaxAllowed, 2000)
 			end
 
 			local userAmmoData <const> = USERS_AMMO_DATA[_source]
@@ -686,10 +686,8 @@ local InventoryService <const> = {
 			local player1ammo <const> = userAmmoData.ammo[ammotype]
 			if not player1ammo then
 				TriggerClientEvent("vorp_inventory:ProcessingReady", _source)
-				return CORE.NotifyRightTip(_source, "you dont have any ammo of this type: " .. ammotype, 2000)
+				return CORE.NotifyRightTip(_source, LANG.noAmmoOfThisType .. ammotype, 2000)
 			end
-
-			local player2ammo <const> = targetAmmoData.ammo[ammotype]
 
 			if not player2ammo then
 				USERS_AMMO_DATA[target].ammo[ammotype] = 0

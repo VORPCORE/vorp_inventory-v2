@@ -83,8 +83,8 @@ local function useWeapon(data)
 	if not weapon:getUsed() and not weapon:getUsed2() then
 		local blocked, kind, maxAllowed = INVENTORY_SERVICE.IS_WEAPON_EQUIP_BLOCKED_BY_LIMIT(weaponId, weapon:getName())
 		if blocked then
-			local tplLong <const> = "You cannot equip more long guns at once (limit: %s)."
-			local tplShort <const> = "You cannot equip more short guns at once (limit: %s)."
+			local tplLong <const> = LANG.cannotEquipMoreLongGuns
+			local tplShort <const> = LANG.cannotEquipMoreShortGuns
 			local msg <const> = kind == "long" and string.format(tplLong, tostring(maxAllowed)) or string.format(tplShort, tostring(maxAllowed))
 			CORE.NotifyRightTip(msg, 5000)
 			NUI_SERVICE.WEAPON.UPDATE_ICON(weapon:getId())
@@ -112,8 +112,6 @@ local function useWeapon(data)
 		end)
 
 		TriggerServerEvent("syn_weapons:weaponused", data)
-		local isDual = true
-		TriggerEvent("vorp_inventory:onWeaponEquipped", weapon:getComponents(), weaponId, weapon:getName(), isDual)
 	else
 		weapon:equipwep()
 		if not isThrowable and not isMelee then
@@ -127,8 +125,6 @@ local function useWeapon(data)
 		weapon:setUsed(true, true)
 
 		TriggerServerEvent("syn_weapons:weaponused", data)
-		local isDual = false
-		TriggerEvent("vorp_inventory:onWeaponEquipped", weapon:getComponents(), weaponId, weapon:getName(), isDual)
 	end
 
 	if weapon:getUsed() then
@@ -728,8 +724,7 @@ local nuiService = {
 			})
 
 			if not result then
-				CORE.NotifyRightTip("No players found", 5000)
-				return
+				return CORE.NotifyRightTip(LANG.noPlayersFound, 5000)
 			end
 
 			local target = result
@@ -819,7 +814,7 @@ local nuiService = {
 				if not objectPositionData then return print("Failed to get object position data") end
 
 				if isInRoad(objectPositionData.position) then
-					return CORE.NotifyRightTip("You cannot drop this item close to roads", 5000)
+					return CORE.NotifyRightTip(LANG.cannotDropNearRoads, 5000)
 				end
 
 				data.advanced = objectPositionData
@@ -872,7 +867,7 @@ local nuiService = {
 
 
 				if objectPositionData and isInRoad(objectPositionData.position) then
-					return CORE.NotifyRightTip("You cannot drop this item close to roads", 5000)
+					return CORE.NotifyRightTip(LANG.cannotDropNearRoads, 5000)
 				end
 
 				data.advanced = objectPositionData
@@ -903,7 +898,7 @@ local nuiService = {
 				end
 
 				if isInRoad(objectPositionData.position) then
-					return CORE.NotifyRightTip("You cannot drop this item close to roads", 5000)
+					return CORE.NotifyRightTip(LANG.cannotDropNearRoads, 5000)
 				end
 
 				data.advanced = objectPositionData
@@ -1188,7 +1183,7 @@ local nuiService = {
 			NUI_SERVICE.INVENTORY.CLOSE()
 			local startCleaning = false
 			if not weapon:getUsed() then
-				return CORE.NotifyRightTip("Must be equipped to inspect", 5000)
+				return CORE.NotifyRightTip(LANG.mustBeEquippedToInspect, 5000)
 			end
 
 			if CACHE.Weapon == `WEAPON_UNARMED` or CACHE.Weapon ~= joaat(weapon:getName()) then
@@ -1228,21 +1223,23 @@ local nuiService = {
 			local databind <const> = setUpDatabinding(weaponHash, weaponObject)
 			StartAudioSceneset("weapon", "Inspect_Item_Scenes")
 
-			local hasItem, id = PLAYER_INVENTORY:HasItem(CONFIG.CLEAN_WEAPON_ITEM)
-			if weaponStatus.degradation == 1.0 then
-				if not hasItem then
-					CORE.NotifyRightTip("You do not have the required item to clean this weapon", 5000)
-				else
-					if not CONFIG.RESTORE_WEAPON_DEGRADATION then
-						CORE.NotifyRightTip("You can't clean this weapon because it's is degraded and cannot be restored", 5000)
+			if CONFIG.CLEAN_WEAPON_ITEM then
+				local hasItem, id = PLAYER_INVENTORY:HasItem(CONFIG.CLEAN_WEAPON_ITEM)
+				if weaponStatus.degradation == 1.0 then
+					if not hasItem then
+						CORE.NotifyRightTip("You do not have the required item to clean this weapon", 5000)
+					else
+						if not CONFIG.RESTORE_WEAPON_DEGRADATION then
+							CORE.NotifyRightTip("You can't clean this weapon because it's is degraded and cannot be restored", 5000)
+						end
 					end
-				end
-				SetPedBlackboardBool(CACHE.Ped, 'GENERIC_WEAPON_CLEAN_PROMPT_AVAILABLE', false, -1)
-			else
-				if weaponStatus.degradation ~= 0.0 and weaponStatus.soot ~= 0.0 and weaponStatus.dirt ~= 0.0 then
-					SetPedBlackboardBool(CACHE.Ped, 'GENERIC_WEAPON_CLEAN_PROMPT_AVAILABLE', true, -1)
-				else
 					SetPedBlackboardBool(CACHE.Ped, 'GENERIC_WEAPON_CLEAN_PROMPT_AVAILABLE', false, -1)
+				else
+					if weaponStatus.degradation ~= 0.0 and weaponStatus.soot ~= 0.0 and weaponStatus.dirt ~= 0.0 then
+						SetPedBlackboardBool(CACHE.Ped, 'GENERIC_WEAPON_CLEAN_PROMPT_AVAILABLE', true, -1)
+					else
+						SetPedBlackboardBool(CACHE.Ped, 'GENERIC_WEAPON_CLEAN_PROMPT_AVAILABLE', false, -1)
+					end
 				end
 			end
 
