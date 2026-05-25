@@ -19,6 +19,7 @@ if CONFIG.HOTBAR.ENABLE then
             local sleep = 1000
             if not IS_INV_OPEN then
                 sleep = 0
+
                 if IsControlJustPressed(0, CONFIG.HOTBAR.TOGGLE_KEY) then
                     hotbarHudVisible = not hotbarHudVisible
                     hotbarSuppressed = false
@@ -26,10 +27,23 @@ if CONFIG.HOTBAR.ENABLE then
                 end
 
                 for i = 1, 5 do
-                    DisableControlAction(0, CONFIG.HOTBAR.SLOT_KEYS[i], true)
-                    if IsDisabledControlJustPressed(0, CONFIG.HOTBAR.SLOT_KEYS[i]) then
-                        NUI_SERVICE.HOTBAR.USE_ITEM(i, true)
-                        break
+                    if IsControlPressed(0, CONFIG.HOTBAR.HOLD_KEY) then
+                        if CONFIG.HOTBAR.SHOW_WHEN_HOLD and not hotbarHudVisible then
+                            hotbarHudVisible = true
+                            hotbarSuppressed = false
+                            NUI_SERVICE.HOTBAR.SET_VISIBLE(hotbarHudVisible)
+                            SetTimeout(3000, function()
+                                hotbarHudVisible = false
+                                hotbarSuppressed = true
+                                NUI_SERVICE.HOTBAR.SET_VISIBLE(hotbarHudVisible)
+                            end)
+                        end
+
+                        DisableControlAction(0, CONFIG.HOTBAR.SLOT_KEYS[i], true)
+                        if IsDisabledControlJustPressed(0, CONFIG.HOTBAR.SLOT_KEYS[i]) then
+                            NUI_SERVICE.HOTBAR.USE_ITEM(i, true)
+                            break
+                        end
                     end
                 end
             end

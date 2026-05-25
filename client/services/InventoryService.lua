@@ -124,7 +124,6 @@ local inventory <const> = {
 		TriggerServerEvent("vorpinventory:getItemsTable")
 		Wait(300)
 		TriggerServerEvent("vorpinventory:getInventory")
-		Wait(1000)
 		TriggerServerEvent("vorpCore:LoadAllAmmo")
 		print("Inventory loaded")
 	end,
@@ -139,6 +138,9 @@ local inventory <const> = {
 	GET_LOADOUT = function(loadout)
 		RemoveAllPedWeapons(CACHE.Ped, true, true)
 		RemoveAllPedAmmo(CACHE.Ped)
+		print("removed all weapons and ammo")
+		Wait(1000)
+		print("loaded out")
 
 		for _, weapon in ipairs(loadout) do
 			if weapon.currInv == "default" and (weapon.dropped == nil or weapon.dropped == 0) then
@@ -267,11 +269,15 @@ local inventory <const> = {
 				ammoCount = weapon:getAmmo("AMMO_MOONSHINEJUG_MP")
 			end
 
-			GiveDelayedWeaponToPed(CACHE.Ped, joaat(weapon:getName()), ammoCount, true, 0)
+			GiveWeaponToPed(CACHE.Ped, joaat(weapon:getName()), ammoCount, false, true, 0, false, 0.5, 1.0, 0, false, 0.0, false)
+			local timer = GetGameTimer()
+			repeat Wait(0) until HasPedGotWeapon(CACHE.Ped, joaat(weapon:getName()), 0, false) == 1 or GetGameTimer() - timer > 10000
+			if GetGameTimer() - timer > 10000 then
+				print("weapon not on ped after 10 seconds")
+			end
 		else
-			local ped = CACHE.Ped
 			GiveWeaponToPed( -- doesnt work with throwables?
-				ped,
+				CACHE.Ped,
 				joaat(weapon:getName()),
 				0,
 				false,
@@ -286,12 +292,33 @@ local inventory <const> = {
 				false
 			)
 
+			if HasPedGotWeapon(CACHE.Ped, joaat(weapon:getName()), 0, false) ~= 1 then
+				repeat
+					Wait(500)
+					GiveWeaponToPed(
+						CACHE.Ped,
+						joaat(weapon:getName()),
+						0,
+						false,
+						true,
+						0,
+						false,
+						0.5,
+						1.0,
+						0,
+						false,
+						0.0,
+						false
+					)
+					print(HasPedGotWeapon(CACHE.Ped, joaat(weapon:getName()), 0, false))
+				until HasPedGotWeapon(CACHE.Ped, joaat(weapon:getName()), 0, false) == 1
+			end
 
 			if not isMelee and not isThrowable then
 				weapon:setDefaultAttachments()
 				weapon:loadAmmo()
 				weapon:loadComponents()
-				SetTimeout(1000, function()
+				SetTimeout(2000, function()
 					weapon:setStatus()
 				end)
 			end
@@ -334,7 +361,6 @@ local inventory <const> = {
 		end
 	end,
 	ASK_TO_GIVE_ITEMS = function(cb, data)
-		print " hello world"
 		local giveLabel
 		if data.type == "item_money" then
 			giveLabel = data.amount .. "$"

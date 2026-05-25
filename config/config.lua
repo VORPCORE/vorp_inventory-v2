@@ -93,11 +93,14 @@ CONFIG.INVENTORY_UI = {
 
 }
 
+--CAN ONLY USE HOTBAR IF PRESSING ALT AND HOLD so you can keep using the 1 2 3 4 5 keys normally while not holding ALT
 CONFIG.HOTBAR       = {
 	ENABLE = true,
+	SHOW_WHEN_HOLD = true,                           -- will show hotbar when holding ALT
 	EDIT_COMMAND = "hotbarpos",                      -- command to edit the hotbar position
 	TOGGLE_KEY = `INPUT_INTERACT_OPTION1`,           -- G -- Hotbar: show/hide
 	ALLOW = "all",                                   -- "all" is items and weapons , weapons only is "weapons" , "items" only is items
+	HOLD_KEY = `INPUT_SELECT_RADAR_MODE`,            -- key to hold to show hotbar (ALT)
 	SLOT_KEYS = {
 		[1] = `INPUT_SELECT_QUICKSELECT_SIDEARMS_LEFT`, -- 1
 		[2] = `INPUT_SELECT_QUICKSELECT_DUALWIELD`,  -- 2
