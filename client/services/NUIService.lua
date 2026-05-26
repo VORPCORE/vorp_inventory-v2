@@ -1001,7 +1001,7 @@ local nuiService = {
 					EnableHandCraftButton = CONFIG.INVENTORY_UI.HAND_CRAFT_BUTTON,
 					EnableSaddleButton = CONFIG.INVENTORY_UI.SADDLE_BUTTON,
 					MainInventoryFixedSlotCount = CONFIG.INVENTORY_UI.MAIN_INVENTORY_FIXED_SLOT_COUNT,
-					EnableWeaponAttachments = CONFIG.USE_WEAPON_COMPONENTS,
+					EnableWeaponAttachments = CONFIG.INVENTORY_UI.USE_WEAPON_COMPONENTS,
 				}
 			})
 		end,

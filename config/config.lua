@@ -91,6 +91,7 @@ CONFIG.INVENTORY_UI = {
 
 	SADDLE_BUTTON = true,              -- enables saddle inventory button
 
+	USE_WEAPON_COMPONENTS = true,      -- enables waepon components button
 }
 
 --CAN ONLY USE HOTBAR IF PRESSING ALT AND HOLD so you can keep using the 1 2 3 4 5 keys normally while not holding ALT
