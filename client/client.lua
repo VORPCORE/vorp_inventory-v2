@@ -149,7 +149,7 @@ CreateThread(function()
     if CONFIG.DISABLE_WEAPON_WHELL_ITEMS then
         EnableHudContext(-2106452847)
     end
-    if CONFIG.DISBALE_WEAPON_WHEEL_WEAPONS then
+    if CONFIG.DISABLE_WEAPON_WHEEL_WEAPONS then
         EnableHudContext(-1249243147)
     end
 

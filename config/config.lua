@@ -38,7 +38,7 @@ CONFIG.ENABLE_PETROL_CAN                 = false -- If true, the petrol can will
 
 CONFIG.DISABLE_WEAPON_WHELL_ITEMS        = false -- this wheel contains the fishing rod etc, if you set this to true it will hide that wheel and you must use these from hot bar.
 
-CONFIG.DISBALE_WEAPON_WHEEL_WEAPONS      = false -- if true, the weapon wheel will not show weapons, only items and you must use these from hot bar. and set ammo in inventory actions dropdown
+CONFIG.DISABLE_WEAPON_WHEEL_WEAPONS      = false -- if true, the weapon wheel will not show weapons, only items and you must use these from hot bar. and set ammo in inventory actions dropdown
 
 -- HERE WE DECIDE IF PLAYERS CAN EQUIP MORE THAN ONE WEAPON TYPE FOR EXAMPLE CAN EQUIPP 2 LONG WEAPONS? OR 2 SHORT WEAPONS?
 --  IF YOU WANT TO DISABLE THIS JUST REMOVE IT FROM THE WEAPONS.LUA FILE the variables LongWeapon and ShortWeapon
