@@ -520,6 +520,8 @@ local Weapon <const> = LIB.Class:Create({
 
 
 		removeComponent      = function(self, component, category)
+			self.components[category] = nil
+
 			if not CONFIG.USE_WEAPON_COMPONENTS then return end
 			local NON_REPLACEABLE_COMPONENTS <const> = {
 				COMPONENT_RIFLE_SCOPE02 = true,
@@ -555,8 +557,8 @@ local Weapon <const> = LIB.Class:Create({
 		end,
 
 		addComponent         = function(self, component, category)
-			if not CONFIG.USE_WEAPON_COMPONENTS then return end
 			self.components[category] = component
+			if not CONFIG.USE_WEAPON_COMPONENTS then return end
 			GiveWeaponComponentToEntity(CACHE.Ped, joaat(component), joaat(self.name), true)
 			--? needs to be documented official vorp event
 			TriggerEvent("vorp_inventory:componentAdded", self.id, component, category)
