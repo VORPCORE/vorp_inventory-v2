@@ -12,6 +12,13 @@ local function getObjectIndexFromPed(weapon)
 	return nil
 end
 
+local LANTERN_HASHES <const> = {
+	[GetHashKey("WEAPON_MELEE_LANTERN")]           = true,
+	[GetHashKey("WEAPON_MELEE_LANTERN_HALLOWEEN")] = true,
+	[GetHashKey("WEAPON_MELEE_DAVY_LANTERN")]      = true,
+	[GetHashKey("WEAPON_MELEE_LANTERN_ELECTRIC")]  = true, -- Just incase it ever gets added
+}
+
 function GetGuidFromItemId(inventoryId, itemData, category, slotId)
 	local outItem = DataView.ArrayBuffer(8 * 13)
 
@@ -297,16 +304,20 @@ local Weapon <const> = LIB.Class:Create({
 			end
 		end,
 
-		UnequipWeapon         = function(self, skipTrigger)
+		UnequipWeapon = function(self, skipTrigger)
 			self:setUsed(false, true)
 			self:setUsed2(false, true)
 			if not skipTrigger then
 				TriggerServerEvent("vorpinventory:setUsedWeapon", self.id, self:getUsed(), self:getUsed2())
 			end
 
-			HolsterPedWeapons(CACHE.Ped, true, false, true, false);
-			Wait(1000)
-			SetCurrentPedWeapon(CACHE.Ped, joaat("WEAPON_UNARMED"), false, 0, false, false);
+			local isLantern = LANTERN_HASHES[joaat(self.name)]
+
+			if not isLantern then
+				HolsterPedWeapons(CACHE.Ped, true, false, true, false)
+				Wait(1000)
+				SetCurrentPedWeapon(CACHE.Ped, joaat("WEAPON_UNARMED"), false, 0, false, false)
+			end
 
 			self:RemoveWeaponFromPed()
 
@@ -416,6 +427,12 @@ local Weapon <const> = LIB.Class:Create({
 					end
 				end
 
+				if LANTERN_HASHES[weaponHash_0] then
+					SetTimeout(500, function()
+						SetCurrentPedWeapon(CACHE.Ped, weaponHash_0, false, 0, false, false)
+					end)
+				end
+
 				if isWeaponPetrolCan then
 					local ammoType <const> = "AMMO_MOONSHINEJUG_MP"
 					local ammoInWeapon <const> = GetAmmoInPedWeapon(CACHE.Ped, weaponHash_0)
@@ -459,6 +476,11 @@ local Weapon <const> = LIB.Class:Create({
 							0.0,
 							false
 						)
+						if LANTERN_HASHES[weaponHash_0] then
+							SetTimeout(500, function()
+								SetCurrentPedWeapon(CACHE.Ped, weaponHash_0, false, 0, false, false)
+							end)
+						end
 					end
 					self:loadAmmo()
 				end
