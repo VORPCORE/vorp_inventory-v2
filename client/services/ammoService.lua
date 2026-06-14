@@ -21,8 +21,10 @@ local THROWABLE_AMMO_TYPES <const> = {
 local Ammo <const> = {
     ADD_AMMO_TO_PED = function(ammoData)
         if not ammoData then return end
+
+        local playerPed <const> = PlayerPedId()
         for ammoType, ammo in pairs(ammoData) do
-            SetPedAmmoByType(CACHE.Ped, joaat(ammoType), ammo)
+            SetPedAmmoByType(playerPed, joaat(ammoType), ammo)
         end
     end,
     RESTORE_PED_AMMO = function()
@@ -159,6 +161,9 @@ AMMO_SERVICE       = Ammo
 
 
 if not CONFIG.MANUAL_WEAPON_RELOAD then
+    local lastTrackedWeapon = `WEAPON_UNARMED`
+    local skipAmmoReadUntil = 0
+
     --* AMMO SAVING THREAD
     CreateThread(function()
         repeat Wait(5000) until LocalPlayer.state.IsInSession
@@ -178,7 +183,35 @@ if not CONFIG.MANUAL_WEAPON_RELOAD then
                 local isBowGroup <const> = wepgroup == `GROUP_BOW`
                 local isPetrol <const> = wepgroup == `GROUP_PETROLCAN`
 
-                if ammotypes and (isArmed or isThrownGroup or isPetrol) and not ismelee then
+                local weaponChanged <const> = wephash ~= lastTrackedWeapon
+                if weaponChanged then
+                    lastTrackedWeapon = wephash
+
+                    if ammotypes and wephash ~= `WEAPON_UNARMED` then
+                        local shouldRestoreAmmo = false
+                        for ammo_type, _ in pairs(ammotypes) do
+                            local beltAmmo <const> = PLAYER_AMMO_INFO.ammo[ammo_type]
+                            if beltAmmo and beltAmmo > 0 then
+                                local pedAmmo = GetPedAmmoByType(playerPedId, joaat(ammo_type))
+                                if (isThrownGroup or isBowGroup or isPetrol) and pedAmmo == 1 then
+                                    pedAmmo = 0
+                                end
+
+                                if pedAmmo <= 0 then
+                                    shouldRestoreAmmo = true
+                                    break
+                                end
+                            end
+                        end
+
+                        if shouldRestoreAmmo then
+                            AMMO_SERVICE.ADD_AMMO_TO_PED(PLAYER_AMMO_INFO.ammo)
+                            skipAmmoReadUntil = GetGameTimer() + 750
+                        end
+                    end
+                end
+
+                if ammotypes and (isArmed or isThrownGroup or isPetrol) and not ismelee and GetGameTimer() >= skipAmmoReadUntil then
                     local shouldUpdateUi = false
 
                     for ammo_type, _ in pairs(ammotypes) do
