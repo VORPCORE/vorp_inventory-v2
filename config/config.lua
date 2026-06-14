@@ -28,7 +28,7 @@ CONFIG.USE_RELOAD_SPEEDS                 = true -- If true, the reload speeds wi
 --          and the game's native reload pulls from it; throwables are not auto-restored on login.
 --   "v2" = manual system: manual reload, unload ammo from weapons, per-weapon clip tracking,
 --          throwables held as physical "1 in hand" items.
-CONFIG.AMMO_SYSTEM                       = "v1" -- "v1" or "v2"
+CONFIG.AMMO_SYSTEM                       = "v2" -- "v1" or "v2"
 
 -- Derived from AMMO_SYSTEM above. Key name kept for upstream-update compatibility (it is
 -- referenced across client/server). Change AMMO_SYSTEM, not this line.
