@@ -19,7 +19,19 @@ USERS_ITEMS                    = {
 -- CONTAINS CUSTOM INVENTORIES CONFIGURATIONS
 ---@type table<string, table>
 CUSTOM_INVENTORIES             = {
-	default = {}
+	default = SECONDARY_INVENTORY:New({
+		id = "default",
+		name = "default",
+		limit = -1,
+		acceptWeapons = true,
+		shared = false,
+		ignoreItemStackLimit = false,
+		whitelistItems = false,
+		UsePermissions = false,
+		UseBlackList = false,
+		whitelistWeapons = false,
+		useWeight = false
+	})
 }
 
 --used to sync time to the clients for degradation in items
