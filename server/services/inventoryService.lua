@@ -41,6 +41,14 @@ local function getSourceInfo(source)
 	return charname, sourceIdentifier, steamname
 end
 
+local function isPlayerInInventoryTransaction(source)
+	return BEING_ASKED[source] or SV_UTILS.PROCESS.USER_IN_PROCESSING(source)
+end
+
+local function notifyInventoryTransactionLocked(source)
+	CORE.NotifyRightTip(source, LANG.activeInventoryTransaction or LANG.playerAlreadyBeingAsked, 5000)
+end
+
 -- to update custom inv cache
 local function updateItem(itemcrafted, value, item, charid, isExpired, id, identifier)
 	local item_add <const> = ITEM:Register({
@@ -266,7 +274,6 @@ local InventoryService <const> = {
 			BEING_ASKED[source] = true
 
 			local result <const> = CORE.Callback.TriggerAwait("vorp_inventory:callback:wantToGiveItems", target, data)
-			print(result, "result")
 
 			BEING_ASKED[target] = nil
 			BEING_ASKED[source] = nil
@@ -300,15 +307,28 @@ local InventoryService <const> = {
 			SV_UTILS.PROCESS.ADD_USER(_source)
 
 			if BEING_ASKED[target] then
+				TriggerClientEvent("vorp_inventory:ProcessingReady", _source)
+				SV_UTILS.PROCESS.REMOVE_USER(_source)
 				return CORE.NotifyRightTip(_source, LANG.playerAlreadyBeingAsked, 5000)
 			end
 
 			if not INVENTORY_SERVICE.GIVE.ASK_TO_GIVE_ITEMS(_source, target, { type = "item_money", amount = amount }) then
+				TriggerClientEvent("vorp_inventory:ProcessingReady", _source)
+				SV_UTILS.PROCESS.REMOVE_USER(_source)
+				CORE.NotifyRightTip(_source, LANG.playerRejectedRequest, 5000)
 				return
 			end
 
-			sourceCharacter.removeCurrency(0, amount)
-			targetCharacter.addCurrency(0, amount)
+			local refreshedSourceCharacter <const> = getCharacter(_source)
+			local refreshedTargetCharacter <const> = getCharacter(target)
+			if not refreshedSourceCharacter or not refreshedTargetCharacter or refreshedSourceCharacter.money < amount then
+				TriggerClientEvent("vorp_inventory:ProcessingReady", _source)
+				SV_UTILS.PROCESS.REMOVE_USER(_source)
+				return CORE.NotifyRightTip(_source, LANG.NotEnoughMoney, 3000)
+			end
+
+			refreshedSourceCharacter.removeCurrency(0, amount)
+			refreshedTargetCharacter.addCurrency(0, amount)
 			CORE.NotifyRightTip(_source, LANG.YouPaid .. amount .. " ID: " .. target, 3000)
 			CORE.NotifyRightTip(target, LANG.YouReceived .. amount .. " ID: " .. _source, 3000)
 
@@ -354,11 +374,22 @@ local InventoryService <const> = {
 			SV_UTILS.PROCESS.ADD_USER(_source)
 
 			if not INVENTORY_SERVICE.GIVE.ASK_TO_GIVE_ITEMS(_source, target, { type = "item_gold", amount = amount }) then
+				TriggerClientEvent("vorp_inventory:ProcessingReady", _source)
+				SV_UTILS.PROCESS.REMOVE_USER(_source)
+				CORE.NotifyRightTip(_source, LANG.playerRejectedRequest, 5000)
 				return
 			end
 
-			sourceCharacter.removeCurrency(1, amount)
-			targetCharacter.addCurrency(1, amount)
+			local refreshedSourceCharacter <const> = getCharacter(_source)
+			local refreshedTargetCharacter <const> = getCharacter(target)
+			if not refreshedSourceCharacter or not refreshedTargetCharacter or refreshedSourceCharacter.gold < amount then
+				TriggerClientEvent("vorp_inventory:ProcessingReady", _source)
+				SV_UTILS.PROCESS.REMOVE_USER(_source)
+				return CORE.NotifyRightTip(_source, LANG.NotEnoughGold, 3000)
+			end
+
+			refreshedSourceCharacter.removeCurrency(1, amount)
+			refreshedTargetCharacter.addCurrency(1, amount)
 			CORE.NotifyRightTip(_source, LANG.YouPaid .. amount .. "ID: " .. target, 3000)
 			CORE.NotifyRightTip(target, LANG.YouReceived .. amount .. "ID: " .. _source, 3000)
 
@@ -497,13 +528,11 @@ local InventoryService <const> = {
 
 		ITEM = function(itemId, amount, target)
 			local _source = source
-			print("a")
 			if target == _source then
 				return CORE.NotifyRightTip(_source, LANG.cantgiveyourself, 5000)
 			end
 
 			if SV_UTILS.PROCESS.USER_IN_PROCESSING(_source) then
-				print("sadsadsada")
 				return
 			end
 
@@ -535,6 +564,7 @@ local InventoryService <const> = {
 			end
 
 			if item:getCount() < amount then
+				CORE.NotifyRightTip(_source, LANG.notEnoughItems, 5000)
 				SV_UTILS.PROCESS.REMOVE_USER(_source)
 				return print("tried to give more than you have possible cheat")
 			end
@@ -577,6 +607,27 @@ local InventoryService <const> = {
 			if not INVENTORY_SERVICE.GIVE.ASK_TO_GIVE_ITEMS(_source, target, { type = "item_standard", itemName = itemName, itemCount = amount }) then
 				SV_UTILS.PROCESS.REMOVE_USER(_source)
 				CORE.NotifyRightTip(_source, LANG.playerRejectedRequest, 5000)
+				return
+			end
+
+			local refreshedSourceInventory <const> = USERS_ITEMS.default[character.identifier]
+			local refreshedItem = refreshedSourceInventory and refreshedSourceInventory[itemId]
+			if not refreshedItem or refreshedItem:getName() ~= itemName or refreshedItem:getCount() < amount then
+				CORE.NotifyRightTip(_source, LANG.notEnoughItems, 5000)
+				CORE.NotifyRightTip(target, LANG.transferCancelled or LANG.notEnoughItems, 5000)
+				SV_UTILS.PROCESS.REMOVE_USER(_source)
+				return
+			end
+
+			item = refreshedItem
+			itemMetadata = item:getMetadata()
+
+			local canCarryItemsAfterAccept <const> = INVENTORY_API.MAIN.CAN_CARRY_ITEM_AMOUNT(target, amount)
+			local canCarryItemAfterAccept <const> = INVENTORY_API.MAIN.CAN_CARRY_ITEM(target, itemName, amount)
+			if not canCarryItemsAfterAccept or not canCarryItemAfterAccept then
+				CORE.NotifyRightTip(_source, LANG.fullInventoryGive, 2000)
+				CORE.NotifyRightTip(target, LANG.fullInventory, 2000)
+				SV_UTILS.PROCESS.REMOVE_USER(_source)
 				return
 			end
 
@@ -989,6 +1040,11 @@ local InventoryService <const> = {
 		end,
 
 		SHARE_WEAPON = function(source, callback, data)
+			if isPlayerInInventoryTransaction(source) then
+				notifyInventoryTransactionLocked(source)
+				return callback(false)
+			end
+
 			if data.isItem == 1 then -- 1 is item 0 is weapon
 				return callback(false)
 			end
@@ -1032,6 +1088,11 @@ local InventoryService <const> = {
 		end,
 
 		SHARE_ITEM = function(source, callback, data)
+			if isPlayerInInventoryTransaction(source) then
+				notifyInventoryTransactionLocked(source)
+				return callback(false)
+			end
+
 			local character <const> = getCharacter(source)
 			if not character then return callback(false) end
 
@@ -1071,6 +1132,11 @@ local InventoryService <const> = {
 		end,
 
 		SHARE_MONEY = function(source, callback, data)
+			if isPlayerInInventoryTransaction(source) then
+				notifyInventoryTransactionLocked(source)
+				return callback(false)
+			end
+
 			local character <const> = getCharacter(source)
 			if not character then return callback(false) end
 
@@ -1105,6 +1171,11 @@ local InventoryService <const> = {
 		end,
 
 		SHARE_GOLD = function(source, callback, data)
+			if isPlayerInInventoryTransaction(source) then
+				notifyInventoryTransactionLocked(source)
+				return callback(false)
+			end
+
 			local character <const> = getCharacter(source)
 			if not character then return callback(false) end
 
@@ -1139,6 +1210,11 @@ local InventoryService <const> = {
 		end,
 
 		SHARE_ROLL = function(source, callback, data)
+			if isPlayerInInventoryTransaction(source) then
+				notifyInventoryTransactionLocked(source)
+				return callback(false)
+			end
+
 			local character <const> = getCharacter(source)
 			if not character then return callback(false) end
 
