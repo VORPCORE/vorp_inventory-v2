@@ -339,7 +339,6 @@ local Weapon <const> = LIB.Class:Create({
 			end
 
 			self:RemoveWeaponFromPed()
-			-- ! removing ammo from ped here removes for all of the guns this type I think this cant be done here if dual wiled is on
 
 			SetPedAmmo(CACHE.Ped, joaat(self.name), 0)
 			for k, _ in pairs(self:getAllAmmo()) do
@@ -425,7 +424,7 @@ local Weapon <const> = LIB.Class:Create({
 					end
 				end
 
-				if weaponHash_0 == `WEAPON_THROWN_THROWING_KNIVES` then
+				if weaponHash_0 == `WEAPON_THROWN_THROWING_KNIVES` and CONFIG.MANUAL_WEAPON_RELOAD then
 					return addAmmoToKnives()
 				end
 
@@ -443,7 +442,7 @@ local Weapon <const> = LIB.Class:Create({
 					[`WEAPON_THROWN_DYNAMITE`] = "AMMO_DYNAMITE",
 				}
 
-				if weapons[weaponHash_0] then
+				if weapons[weaponHash_0] and CONFIG.MANUAL_WEAPON_RELOAD then
 					-- this is needed somehow the game saves last ammo and when we add 1 it makes it 2
 					local ammoType <const> = weapons[weaponHash_0]
 					local ammoInWeapon <const> = GetAmmoInPedWeapon(CACHE.Ped, weaponHash_0)
@@ -461,7 +460,7 @@ local Weapon <const> = LIB.Class:Create({
 					end)
 				end
 
-				if isWeaponPetrolCan then
+				if isWeaponPetrolCan and CONFIG.MANUAL_WEAPON_RELOAD then
 					local ammoType <const> = "AMMO_MOONSHINEJUG_MP"
 					local ammoInWeapon <const> = GetAmmoInPedWeapon(CACHE.Ped, weaponHash_0)
 					local maxAllowed <const> = self:getAmmo(ammoType)
@@ -483,6 +482,15 @@ local Weapon <const> = LIB.Class:Create({
 				self:setUsed(true)
 				if self.used2 and CONFIG.DUAL_WIELD then
 					if isWeaponAGun and isWeaponOneHanded then
+						if not CONFIG.DUAL_WIELD_HOLSTER_NEEDED then
+							INVENTORY_SERVICE.APPLY_OFF_HAND_HOLSTER()
+						end
+
+						self:_addWeapon(self.name, 1, self.id)
+						if not CONFIG.MANUAL_WEAPON_RELOAD then
+							return
+						end
+
 						local ammo = {}
 						local weaponUsed = nil
 						ammo[#ammo + 1] = self:getAllAmmo()
@@ -493,13 +501,6 @@ local Weapon <const> = LIB.Class:Create({
 								weaponUsed = weapon
 							end
 						end
-						-- in case ped has been reloaded we need weapon visible yes its free holster but its needed other wise put dual wield to false
-						if not CONFIG.DUAL_WIELD_HOLSTER_NEEDED then
-							INVENTORY_SERVICE.APPLY_OFF_HAND_HOLSTER()
-						end
-
-						-- YES FOR DUAL WIELDING WE MUST DO THIS HACKY STUFF TO ENSURE AMMO IS SET CORRECTLY
-						self:_addWeapon(self.name, 1, self.id)
 						--self:holsterDualWieldSlots()
 						if self.name ~= weaponUsed.name then
 							local ammoTotal = {} -- ONLY IF GUNS ARE DIFERENT
@@ -755,6 +756,9 @@ local Weapon <const> = LIB.Class:Create({
 		loadAmmo             = function(self)
 			-- need a config to disable certain ammo types from weapons like dynamite etc
 			--	DisableAmmoTypeForPedWeapon(CACHE.Ped, joaat(self.name), joaat(type))
+			if not CONFIG.MANUAL_WEAPON_RELOAD then
+				return
+			end
 
 			for type, amount in pairs(self.ammo) do
 				if SHARED_DATA.AMMO_TYPE_HASH[joaat(type)] then
@@ -903,6 +907,10 @@ function WEAPON:AddDualWield(weapons)
 			weapon:addWeaponDualWield(weapon:getName(), 1, weapon:getId())
 			break
 		end
+	end
+
+	if not CONFIG.MANUAL_WEAPON_RELOAD then
+		return
 	end
 
 	Wait(1000)

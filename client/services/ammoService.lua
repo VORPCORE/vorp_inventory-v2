@@ -22,8 +22,6 @@ local Ammo <const> = {
 
         if setAmmoToPed then
             if not CONFIG.MANUAL_WEAPON_RELOAD then
-                RemoveAllPedWeapons(CACHE.Ped, true, true)
-                RemoveAllPedAmmo(CACHE.Ped)
                 AMMO_SERVICE.ADD_AMMO_TO_PED(PLAYER_AMMO_INFO.ammo)
             end
             if not isSource then
