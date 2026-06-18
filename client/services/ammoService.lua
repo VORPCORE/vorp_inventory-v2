@@ -10,7 +10,9 @@ local EVENT <const>     = LIB.Events
 local Ammo <const> = {
     ADD_AMMO_TO_PED = function(ammoData)
         for ammoType, ammo in pairs(ammoData) do
-            SetPedAmmoByType(CACHE.Ped, joaat(ammoType), ammo)
+            if ammo > 0 then
+                SetPedAmmoByType(CACHE.Ped, joaat(ammoType), ammo)
+            end
         end
     end,
 
@@ -125,10 +127,6 @@ if not CONFIG.MANUAL_WEAPON_RELOAD then
     CreateThread(function()
         repeat Wait(5000) until LocalPlayer.state.IsInSession
 
-        if CONFIG.MANUAL_WEAPON_RELOAD then
-            return
-        end
-
         while true do
             local sleep = 500
             -- this thread is to remove ammo one by one so we dont loose the ammo that is on the weapon if we diconnect
@@ -138,8 +136,6 @@ if not CONFIG.MANUAL_WEAPON_RELOAD then
                 local wephash <const> = GetPedCurrentHeldWeapon(playerPedId)
                 local ismelee <const> = IsWeaponMeleeWeapon(wephash) == 1
                 local wepgroup <const> = GetWeapontypeGroup(wephash)
-                -- local ammotypes <const> = SHARED_DATA.AMMO_TYPES[wepgroup]
-                -- if ammotypes then
                 local isThrownGroup <const> = wepgroup == `GROUP_THROWN`
                 local isBowGroup <const> = wepgroup == `GROUP_BOW`
                 local isPetrol <const> = wepgroup == `GROUP_PETROLCAN`
@@ -154,7 +150,7 @@ if not CONFIG.MANUAL_WEAPON_RELOAD then
 
                         if value ~= ammoQty then
                             UPDATE_AMMO_CACHE[ammo_type] = ammoQty
-                            value = ammoQty
+                            PLAYER_AMMO_INFO.ammo[ammo_type] = ammoQty
                         end
                     end
                 end
@@ -162,7 +158,6 @@ if not CONFIG.MANUAL_WEAPON_RELOAD then
             Wait(sleep)
         end
     end)
-
 
     CreateThread(function()
         while true do

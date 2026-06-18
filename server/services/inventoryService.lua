@@ -1697,6 +1697,10 @@ local InventoryService <const> = {
 					return print("amount is greater than what we have :", amount, "we have :", userAmmoData.ammo[ammoType], "ammo type :", ammoType, "possible cheat!!", GetPlayerName(_source))
 				end
 
+				if amount <= 0 then
+					userAmmoData.ammo[ammoType] = nil
+				end
+
 				userAmmoData.ammo[ammoType] = math.min(amount, SHARED_DATA.MAX_AMMO_BELT[ammoType])
 			end
 		end,
@@ -1982,34 +1986,34 @@ local InventoryService <const> = {
 
 		if value.ITEMS.ENABLE then
 			if not value.ITEMS.JOB_LOCK[job] then
-					if value.ITEMS.ALL then
-						INVENTORY_API.MAIN.REMOVE_ALL_ITEMS(_source)
-					else
-						INVENTORY_API.MAIN.GET_INVENTORY(_source, function(userInventory)
-							for _, itemData in ipairs(userInventory) do
-									if not value.ITEMS.WHITELIST[itemData.name] then
-										INVENTORY_API.MAIN.SUB_ITEM_BY_ID(_source, itemData.id)
-									end
+				if value.ITEMS.ALL then
+					INVENTORY_API.MAIN.REMOVE_ALL_ITEMS(_source)
+				else
+					INVENTORY_API.MAIN.GET_INVENTORY(_source, function(userInventory)
+						for _, itemData in ipairs(userInventory) do
+							if not value.ITEMS.WHITELIST[itemData.name] then
+								INVENTORY_API.MAIN.SUB_ITEM_BY_ID(_source, itemData.id)
 							end
-						end)
-					end
+						end
+					end)
+				end
 			end
 		end
 
 		if value.WEAPONS.ENABLE then
 			if not value.WEAPONS.JOB_LOCK[job] then
-					if value.WEAPONS.ALL then
-						INVENTORY_API.MAIN.REMOVE_ALL_WEAPONS(_source)
-					else
-						INVENTORY_API.MAIN.GET_WEAPONS(_source, function(userWeapons)
-							for _, weaponData in ipairs(userWeapons) do
-									if not value.WEAPONS.WHITELIST[weaponData.name] then
-										INVENTORY_API.MAIN.REMOVE_WEAPON(_source, weaponData.id)
-										INVENTORY_API.MAIN.DELETE_WEAPON(_source, weaponData.id)
-									end
+				if value.WEAPONS.ALL then
+					INVENTORY_API.MAIN.REMOVE_ALL_WEAPONS(_source)
+				else
+					INVENTORY_API.MAIN.GET_WEAPONS(_source, function(userWeapons)
+						for _, weaponData in ipairs(userWeapons) do
+							if not value.WEAPONS.WHITELIST[weaponData.name] then
+								INVENTORY_API.MAIN.REMOVE_WEAPON(_source, weaponData.id)
+								INVENTORY_API.MAIN.DELETE_WEAPON(_source, weaponData.id)
 							end
-						end)
-					end
+						end
+					end)
+				end
 			end
 		end
 
