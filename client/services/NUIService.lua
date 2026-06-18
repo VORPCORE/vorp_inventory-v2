@@ -726,9 +726,15 @@ local nuiService = {
 					local amount = tonumber(data2.count)
 					local item = PLAYER_INVENTORY.ITEMS[itemId]
 
-					if amount > 0 and item ~= nil and item:getCount() >= amount then
-						TriggerServerEvent("vorpinventory:serverGiveItem", itemId, amount, target)
+					if not amount or amount <= 0 or item == nil then
+						return CORE.NotifyRightTip(LANG.notEnoughItems, 5000)
 					end
+
+					if item:getCount() < amount then
+						return CORE.NotifyRightTip(LANG.notEnoughItems, 5000)
+					end
+
+					TriggerServerEvent("vorpinventory:serverGiveItem", itemId, amount, target)
 				else
 					TriggerServerEvent("vorpinventory:serverGiveWeapon", tonumber(itemId), target)
 				end
@@ -1316,7 +1322,7 @@ local nuiService = {
 			if not item then return end
 
 			if quantity > item:getCount() then
-				return
+				return CORE.NotifyRightTip(LANG.notEnoughItems, 5000)
 			end
 
 			local playerPed <const> = CACHE.Ped
