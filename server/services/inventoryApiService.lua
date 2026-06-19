@@ -993,7 +993,8 @@ local InventoryAPI = {
 			end
 
 			USERS_AMMO_DATA[_source].ammo = ammo
-			TriggerClientEvent("vorpinventory:recammo", _source, USERS_AMMO_DATA[_source])
+
+			TriggerClientEvent("vorpinventory:recammo", _source, USERS_AMMO_DATA[_source], not CONFIG.MANUAL_WEAPON_RELOAD)
 
 			local query1 = 'UPDATE characters SET ammo = @ammo WHERE charidentifier = @charidentifier'
 			local params1 <const> = { charidentifier = charidentifier, ammo = json.encode(ammo) }
