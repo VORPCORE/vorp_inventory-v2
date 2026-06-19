@@ -150,6 +150,7 @@ if not CONFIG.MANUAL_WEAPON_RELOAD then
                         if value ~= ammoQty then
                             UPDATE_AMMO_CACHE[ammo_type] = ammoQty
                             PLAYER_AMMO_INFO.ammo[ammo_type] = ammoQty
+                            SendNUIMessage({ action = "updateammo", ammo = PLAYER_AMMO_INFO.ammo })
                         end
                     end
                 end
@@ -167,7 +168,6 @@ if not CONFIG.MANUAL_WEAPON_RELOAD then
                     if next(UPDATE_AMMO_CACHE) then
                         -- need in case of crash or disconnect to make sure its saved
                         TriggerServerEvent("vorpinventory:updateammo", PLAYER_AMMO_INFO)
-                        SendNUIMessage({ action = "updateammo", ammo = PLAYER_AMMO_INFO.ammo })
                         UPDATE_AMMO_CACHE = {}
                     end
                 end
