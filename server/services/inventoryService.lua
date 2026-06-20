@@ -3200,6 +3200,7 @@ local InventoryService <const> = {
 			local needed <const> = recipe.NEEDED
 			local reward <const> = recipe.REWARD
 			local idsToRemove <const> = {}
+			local found <const> = {}
 
 			for itemId, itemData in pairs(userInventory) do
 				local itemName <const> = itemData:getName()
@@ -3207,6 +3208,7 @@ local InventoryService <const> = {
 				local itemNeeded <const> = needed[itemName]
 
 				if itemNeeded and itemAmount >= itemNeeded then
+					found[itemName] = true
 					table.insert(idsToRemove, itemId)
 				end
 			end
@@ -3215,6 +3217,11 @@ local InventoryService <const> = {
 				return cb(false)
 			end
 
+			for itemName in pairs(needed) do
+				if not found[itemName] then
+					return cb(false)
+				end
+			end
 
 			local itemName <const> = next(reward)
 			local amount <const> = reward[itemName]
