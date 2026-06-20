@@ -2592,6 +2592,9 @@ $("document").ready(function () {
             $("#inventorySaddleBtn").prop("disabled", type !== "main" || !Config.EnableSaddleButton);
             $("#weaponAttachmentsOpenBtn").prop("disabled", type !== "main" || Config.EnableWeaponAttachments !== true);
             $("#inventorySortBtn").prop("disabled", type !== "main");
+            if (!Config.EnableHotbar) {
+                $("#hotbarHud").addClass("hotbar-hud--hidden");
+            }
             HOTBAR.VISIBILITY.REFRESH();
             stopTooltip = false;
             INVENTORY.MAIN.MOVE_INVENTORY_HUD("main");
@@ -2770,7 +2773,7 @@ $("document").ready(function () {
             for (p; p < l; p++) {
                 total += Number(itemlist[p].count)
             }
-            let weight = null
+
             //amount of items in Inventory
             INVENTORY.SECONDARY.SET_CURRENT_CAPACITY(total);
         } else if (event.data.action == "mainItemUpdate") {
