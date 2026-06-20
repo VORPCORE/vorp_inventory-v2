@@ -378,6 +378,7 @@ const HOTBAR = {
 
     VISIBILITY: {
         REFRESH: function () {
+            if(!Config.EnableHotbar) return;
             const inventoryNuiOpen = type !== "normal";
             const show = hotbarEditMode || inventoryNuiOpen || hotbarGameVisible;
             if (show) {
