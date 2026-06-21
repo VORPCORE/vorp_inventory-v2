@@ -1206,6 +1206,7 @@ INVENTORY.MAIN = {
             }
 
             if (item.type === "item_weapon") {
+
                 const actionSubs = [];
                 if ((item.used || item.used2) && item.canDegrade) {
                     actionSubs.push({
@@ -1215,7 +1216,8 @@ INVENTORY.MAIN = {
                         },
                     });
                 }
-                if (INVENTORY.MAIN.WEAPON_HAS_CLIP_AMMO(item)) {
+
+                if (INVENTORY.MAIN.WEAPON_HAS_CLIP_AMMO(item) && Config.ManualWeaponReload) {
                     actionSubs.push({
                         text: LANGUAGE.removebullets,
                         action: function () {
@@ -1223,7 +1225,8 @@ INVENTORY.MAIN = {
                         },
                     });
                 }
-                if ((item.used || item.used2) && item.type === "item_weapon" && Config.AddAmmoItem && INVENTORY.WEAPON.SHOW_AMMO_UI(item)) {
+
+                if ((item.used || item.used2) && item.type === "item_weapon" && Config.AddAmmoItem && INVENTORY.WEAPON.SHOW_AMMO_UI(item) && Config.ManualWeaponReload) {
                     const ammoAllowed = item.ammoAllowed;
                     if (ammoAllowed && ammoAllowed.length) {
                         const itemRef = item;
@@ -1257,7 +1260,7 @@ INVENTORY.MAIN = {
                         });
                     }
                 }
-                if ((item.used || item.used2) && INVENTORY.WEAPON.SHOW_AMMO_UI(item)) {
+                if ((item.used || item.used2) && INVENTORY.WEAPON.SHOW_AMMO_UI(item) && Config.ManualWeaponReload) {
                     actionSubs.push({
                         text: LANGUAGE.reloadweapon,
                         action: function () {
@@ -2506,9 +2509,8 @@ $("document").ready(function () {
             Config.InvOrder = LuaConfig.InvOrder;
             Config.HotbarAllow = LuaConfig.HotbarAllow;
             Config.ItemRaritySlotStyle = LuaConfig.ItemRaritySlotStyle ?? Config.ItemRaritySlotStyle;
-            if (LuaConfig.TooltipPlacement) {
-                Config.TooltipPlacement = LuaConfig.TooltipPlacement;
-            }
+            Config.TooltipPlacement = LuaConfig.TooltipPlacement;
+            Config.ManualWeaponReload = LuaConfig.ManualWeaponReload;
 
             Config.MainInventoryFixedSlotCount = LuaConfig.MainInventoryFixedSlotCount;
 

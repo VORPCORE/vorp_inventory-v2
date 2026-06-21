@@ -18,3 +18,4 @@ Config.MainInventoryWheelScale = 0.45;
 Config.ItemRaritySlotStyle = "border";
 Config.TooltipPlacement = "hover";
 Config.MainInventoryFixedSlotCount = 52;
+Config.ManualWeaponReload = true;

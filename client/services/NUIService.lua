@@ -990,6 +990,7 @@ local nuiService = {
 					InvOrder = CONFIG.INV_ORDER,
 					MainInventoryFixedSlotCount = CONFIG.INVENTORY_UI.MAIN_INVENTORY_FIXED_SLOT_COUNT,
 					EnableWeaponAttachments = CONFIG.USE_WEAPON_COMPONENTS,
+					ManualWeaponReload = CONFIG.MANUAL_WEAPON_RELOAD,
 				}
 			})
 		end,
