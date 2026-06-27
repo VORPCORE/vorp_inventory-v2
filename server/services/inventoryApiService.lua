@@ -1141,7 +1141,7 @@ local InventoryAPI = {
 			if not userWeapons then return respond(cb, false) end
 
 			userWeapons:setSerialNumber(serial)
-			TriggerClientEvent("vorp_inventory:setWeaponSerialNumber", _source, weaponId, serial)
+			TriggerClientEvent("vorpInventory:setWeaponSerialNumber", _source, weaponId, serial)
 			DB_SERVICE.ASYNC.UPDATE('UPDATE loadout SET serial_number = @serial_number WHERE id = @id',
 				{ id = weaponId, serial_number = serial })
 
@@ -1154,7 +1154,7 @@ local InventoryAPI = {
 			if not userWeapons then return respond(cb, false) end
 
 			userWeapons:setCustomDesc(description)
-			TriggerClientEvent("vorp_inventory:setWeaponCustomDesc", _source, weaponId, description)
+			TriggerClientEvent("vorpInventory:setWeaponCustomDesc", _source, weaponId, description)
 			DB_SERVICE.ASYNC.UPDATE('UPDATE loadout SET custom_desc = @custom_desc WHERE id = @id',
 				{ id = weaponId, custom_desc = description })
 
