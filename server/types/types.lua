@@ -140,7 +140,7 @@ function exports.vorp_inventory:getItemDB(item, callback) end
 ---@param serial string serial number
 ---@param callback fun(boolean:boolean)? callback function async or sync leave nil
 ---@return boolean
-function exports.vorp_inventory:setWeaponSerialNumber(weaponId, serial, callback) end
+function exports.vorp_inventory:setWeaponSerialNumber(source, weaponId, serial, callback) end
 
 --- see [documentation](https://docs.vorp-core.com/api-reference/inventory)<br>
 --- set weapon custom label
@@ -148,7 +148,7 @@ function exports.vorp_inventory:setWeaponSerialNumber(weaponId, serial, callback
 ---@param label string label
 ---@param callback fun(boolean:boolean)? callback function async or sync leave nil
 ---@return boolean
-function exports.vorp_inventory:setWeaponCustomLabel(weaponId, label, callback) end
+function exports.vorp_inventory:setWeaponCustomLabel(source, weaponId, label, callback) end
 
 --- see [documentation](https://docs.vorp-core.com/api-reference/inventory)<br>
 --- set weapon custom description
@@ -156,7 +156,7 @@ function exports.vorp_inventory:setWeaponCustomLabel(weaponId, label, callback) 
 ---@param desc string description
 ---@param callback fun(boolean:boolean)? callback function async or sync leave nil
 ---@return boolean
-function exports.vorp_inventory:setWeaponCustomDesc(weaponId, desc, callback) end
+function exports.vorp_inventory:setWeaponCustomDesc(source, weaponId, desc, callback) end
 
 --- see [documentation](https://docs.vorp-core.com/api-reference/inventory)<br>
 --- add item to user
