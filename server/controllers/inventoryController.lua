@@ -20,6 +20,7 @@ RegisterServerEvent("vorpinventory:updateammo", INVENTORY_SERVICE.AMMO.UPDATE)
 RegisterServerEvent("vorpinventory:AddBulletFromWeapon", INVENTORY_SERVICE.WEAPON.ADD_BULLET)
 RegisterServerEvent("vorpinventory:updateweapons", INVENTORY_SERVICE.WEAPON.UPDATE)
 RegisterServerEvent("vorpinventory:weaponReloaded", INVENTORY_SERVICE.WEAPON.RELOADED)
+RegisterServerEvent("vorpinventory:setWeaponAmmoType", INVENTORY_SERVICE.WEAPON.SET_AMMO_TYPE)
 RegisterServerEvent("vorpinventory:saveWeaponStatus", INVENTORY_SERVICE.WEAPON.SAVE_STATUS)
 RegisterNetEvent("vorp:PlayerForceRespawn", INVENTORY_SERVICE.FORCE_RESPAWN)
 

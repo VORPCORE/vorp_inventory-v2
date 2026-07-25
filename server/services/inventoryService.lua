@@ -1611,6 +1611,30 @@ local InventoryService <const> = {
 			userAmmoData.ammo[ammoType] = math.max(0, userAmmoData.ammo[ammoType] - amount)
 		end,
 
+		SET_AMMO_TYPE = function(data)
+			local _source <const> = source
+			local weaponId <const> = data.weaponId
+			local ammoType <const> = data.ammoType
+			local weapon <const> = USERS_WEAPONS.default[weaponId]
+			if not weapon then return print("weapon not found :", weaponId) end
+
+			local userAmmoData <const> = USERS_AMMO_DATA[_source]
+			if not userAmmoData then return print("user ammo data not found :", _source) end
+
+			local beltAmount <const> = userAmmoData.ammo[ammoType] or 0
+			if beltAmount <= 0 then
+				return print("not enough ammo in belt :", ammoType, "player :", GetPlayerName(_source))
+			end
+
+			local amountToLoad <const> = math.min(weapon:getDefaultClipSize(), beltAmount)
+
+			weapon:addAmmoToClip(ammoType, amountToLoad)
+			userAmmoData.ammo[ammoType] = math.max(0, beltAmount - amountToLoad)
+
+			TriggerClientEvent("vorpinventory:recammo", _source, userAmmoData)
+			TriggerClientEvent("vorpinventory:setWeaponAmmoType", _source, weaponId, ammoType, amountToLoad, weapon:getName())
+		end,
+
 		ADD_BULLET = function(ammotype, amount, weaponid)
 			local _source <const> = source
 

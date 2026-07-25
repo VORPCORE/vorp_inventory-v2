@@ -16,4 +16,5 @@ RegisterNetEvent("vorp_inventory:SetItemDurability", INVENTORY_API_SERVICE.SET_I
 RegisterNetEvent("vorpinventory:recammo", AMMO_SERVICE.UPDATE_AMMO)
 RegisterNetEvent("vorpinventory:loadammo", AMMO_SERVICE.LOAD_AMMO)
 RegisterNetEvent("vorpinventory:weaponClipUnloaded", AMMO_SERVICE.REMOVE_BULLETS_FROM_WEAPON)
+RegisterNetEvent("vorpinventory:setWeaponAmmoType", AMMO_SERVICE.SET_AMMO_TYPE_FOR_WEAPON)
 RegisterNetEvent("vorpinventory:ammoUpdateToggle", AMMO_SERVICE.AMMO_TOGGLE)

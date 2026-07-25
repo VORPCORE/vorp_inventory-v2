@@ -501,8 +501,8 @@ local Weapon <const> = LIB.Class:Create({
 								weaponUsed = weapon
 							end
 						end
-						--self:holsterDualWieldSlots()
-						if self.name ~= weaponUsed.name then
+
+						if weaponUsed and self.name ~= weaponUsed.name then
 							local ammoTotal = {} -- ONLY IF GUNS ARE DIFERENT
 							for _, ammotable in pairs(ammo) do
 								for ammoType, amount in pairs(ammotable) do
@@ -836,6 +836,7 @@ local Weapon <const> = LIB.Class:Create({
 ---@field public New fun(self: WEAPON_CLIENT, data: table): WEAPON_CLIENT
 ---@field public Register fun(self: WEAPON_CLIENT, data: table): WEAPON_CLIENT
 WEAPON = Weapon
+
 
 function WEAPON:Register(data)
 	local weaponClass <const> = WEAPON:New(data)
