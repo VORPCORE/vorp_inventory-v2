@@ -189,7 +189,7 @@ INVENTORY.SECONDARY = {
                         S.MOVE_TO_STORE(itemData, qty);
                     }
                 } else {
-                    S.MOVE_TO_STORE(itemData, 1);
+                    S.OPEN_STORE_PRICE_DIALOG(itemData, 1);
                 }
             }
         });
