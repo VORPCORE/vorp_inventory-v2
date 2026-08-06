@@ -163,7 +163,6 @@ local Weapon <const> = LIB.Class:Create({
 		if move then
 			--SET_CURRENT_PED_WEAPON_BY_GUID
 			Citizen.InvokeNative(0x12FB95FE3D579238, CACHE.Ped, _EQUIPPED[1].guid, true, 1, false, false)
-			TriggerServerEvent("syn_weapons:applyDupeTint", id, itemData:Buffer(), weaponHash)
 		end
 		if id then
 			table.insert(_EQUIPPED, { id = id, guid = itemData:Buffer() })
