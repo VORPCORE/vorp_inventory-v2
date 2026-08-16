@@ -2511,8 +2511,7 @@ $("document").ready(function () {
             Config.ItemRaritySlotStyle = LuaConfig.ItemRaritySlotStyle ?? Config.ItemRaritySlotStyle;
             Config.TooltipPlacement = LuaConfig.TooltipPlacement;
             Config.ManualWeaponReload = LuaConfig.ManualWeaponReload;
-
-            Config.MainInventoryFixedSlotCount = LuaConfig.MainInventoryFixedSlotCount;
+            Config.MainInventoryFixedSlotCount = Math.min(Number(LuaConfig.MainInventoryFixedSlotCount) || 52, 500);
 
             if (Config.EnableHotbar && event.data.hotbarPos) {
                 hotbarCustomPos = event.data.hotbarPos;
