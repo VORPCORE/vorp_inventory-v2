@@ -305,7 +305,7 @@ local Weapon <const> = LIB.Class:Create({
 				for _, weapon in pairs(PLAYER_INVENTORY.WEAPONS) do
 					local isWeaponOneHanded <const> = IsWeaponOneHanded(joaat(weapon:getName())) == 1
 					local isWeaponAGun <const> = Citizen.InvokeNative(0x705BE297EEBDB95D, joaat(weapon:getName()))
-					if self.name ~= weapon:getName() and isWeaponOneHanded and isWeaponAGun then
+					if self.name ~= weapon:getName() and isWeaponOneHanded and isWeaponAGun and weapon:getUsed() then
 						weapon:setUsed2(false) -- updates server because bellow wont update if true
 						weapon:loadAmmo()
 						SetCurrentPedWeapon(CACHE.Ped, joaat(weapon:getName()), true, 2, false, false)
@@ -478,7 +478,6 @@ local Weapon <const> = LIB.Class:Create({
 					end
 				end
 
-				self:setUsed(true)
 				if self.used2 and CONFIG.DUAL_WIELD then
 					if isWeaponAGun and isWeaponOneHanded then
 						INVENTORY_SERVICE.APPLY_OFF_HAND_HOLSTER()
