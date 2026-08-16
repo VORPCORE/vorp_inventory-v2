@@ -2768,16 +2768,6 @@ $("document").ready(function () {
 
             INVENTORY.SECONDARY.SCHEDULE_GROUP_STRIP();
 
-            let l = event.data.itemList.length
-            let itemlist = event.data.itemList
-            let total = 0
-            let p = 0
-            for (p; p < l; p++) {
-                total += Number(itemlist[p].count)
-            }
-
-            //amount of items in Inventory
-            INVENTORY.SECONDARY.SET_CURRENT_CAPACITY(total);
         } else if (event.data.action == "mainItemUpdate") {
             INVENTORY.MAIN.MAIN_UPDATE_ITEM(event.data.item);
             WEAPON_ATTACHMENTS.MAIN_ITEM_UPDATE(event.data.item);

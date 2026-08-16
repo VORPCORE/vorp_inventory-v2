@@ -399,6 +399,21 @@ INVENTORY.SECONDARY = {
                 $("#secondInventoryElement").append(`<div class='item' data-group='0'></div>`);
             }
         }
+
+        S.RECALCULATE_CURRENT_CAPACITY();
+    },
+
+    RECALCULATE_CURRENT_CAPACITY: function () {
+        let total = 0;
+        $("#secondInventoryElement .item").each(function () {
+            const d = $(this).data("item");
+            if (!d) return;
+            const count = d.type === "item_weapon" ? 1 : Number(d.count);
+            if (Number.isFinite(count)) {
+                total += count;
+            }
+        });
+        this.SET_CURRENT_CAPACITY(total);
     },
 
     ITEM_ADDED: function (item) {
@@ -447,6 +462,8 @@ INVENTORY.SECONDARY = {
                 itemInventory = "second";
             },
         });
+
+        S.RECALCULATE_CURRENT_CAPACITY();
     },
 
     ITEM_REMOVED: function (id, itemType) {
@@ -461,6 +478,8 @@ INVENTORY.SECONDARY = {
         if (total < minSlots) {
             $inv.append(`<div class='item' data-group='0'></div>`);
         }
+
+        this.RECALCULATE_CURRENT_CAPACITY();
     },
 
     ITEM_UPDATED: function (id, count) {
@@ -475,6 +494,8 @@ INVENTORY.SECONDARY = {
             d.count = count;
             $el.data("item", d);
         }
+
+        this.RECALCULATE_CURRENT_CAPACITY();
     },
 
     SET_TITLE: function (title) {
