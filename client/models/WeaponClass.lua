@@ -784,9 +784,11 @@ local Weapon <const> = LIB.Class:Create({
 							maxAllowed = self:getDefaultClipSize()
 						end
 
+
 						if ammoInWeapon > maxAllowed then
-							-- somehow it adds more ammo than it should, seems the game saves some ammo in ped
 							RemoveAmmoFromPedByType(CACHE.Ped, joaat(type), ammoInWeapon - maxAllowed, `REMOVE_REASON_DROPPED`)
+						elseif ammoInWeapon > amount then
+							RemoveAmmoFromPedByType(CACHE.Ped, joaat(type), ammoInWeapon - amount, `REMOVE_REASON_DROPPED`)
 						end
 					end
 				end
