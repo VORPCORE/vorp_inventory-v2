@@ -195,7 +195,46 @@ const CRAFTING = {
             $(document).off("click.handCraftDd keydown.handCraftDd");
             $(window).off("resize.handCraftDd");
             $("#handCraftingPanel .hand-crafting-panel-inner").off("scroll.handCraftDd");
-            $("#handCraftingRecipeList").off("wheel.handCraftDd");
+            $("#handCraftingRecipeList").off("wheel.handCraftDd mouseenter.handCraftTip mouseleave.handCraftTip");
+            $(document).off("mousemove.handCraftTip");
+            $(".tooltip").remove();
+        },
+
+        BIND_TOOLTIPS: function () {
+            const $items = $("#handCraftingRecipeList .hand-crafting-panel-recipe-item[data-index]");
+            $items.off("mouseenter.handCraftTip mouseleave.handCraftTip");
+
+            $items.on("mouseenter.handCraftTip", function (e) {
+                if (typeof stopTooltip !== "undefined" && stopTooltip) return;
+
+                $(".tooltip").remove();
+                $(document).off("mousemove.handCraftTip");
+
+                const $el = $(this);
+                const idx = Number($el.attr("data-index"));
+                const recipe = craftingRecipes[idx];
+                if (!recipe) return;
+
+                const label = recipe.label != null ? String(recipe.label).trim() : "";
+                if (!label) return;
+
+                const $tooltip = $("<div/>")
+                    .addClass("tooltip tooltip--rich tooltip--rich-compact-hud")
+                    .css("pointer-events", "none")
+                    .appendTo("body");
+
+                INVENTORY.TOOLTIP.APPEND_HUD_STRIP($tooltip, label, null);
+                INVENTORY.TOOLTIP.APPLY_LOCATION($tooltip, $el, e);
+
+                $(document).on("mousemove.handCraftTip", function (moveEv) {
+                    INVENTORY.TOOLTIP.STATIC_ITEMS($tooltip, moveEv);
+                });
+            });
+
+            $items.on("mouseleave.handCraftTip", function () {
+                $(document).off("mousemove.handCraftTip");
+                $(".tooltip").remove();
+            });
         },
 
         BIND_SCROLL: function () {
@@ -269,6 +308,7 @@ const CRAFTING = {
             }
             CRAFTING.RECIPE_LIST.SYNC_SELECTION_UI();
             CRAFTING.RECIPE_LIST.BIND_SCROLL();
+            CRAFTING.RECIPE_LIST.BIND_TOOLTIPS();
         },
     },
 
