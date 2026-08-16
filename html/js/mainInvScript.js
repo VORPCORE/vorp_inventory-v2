@@ -1235,10 +1235,12 @@ INVENTORY.MAIN = {
                             const hasOnWeapon = item.ammo && Object.prototype.hasOwnProperty.call(item.ammo, ammoType);
                             const onWeapon = hasOnWeapon ? Number(item.ammo[ammoType]) || 0 : null;
                             let countLabel = String(belt);
+                            const beltLabel = UTILS.RESOLVE_STATIC_LANG("ammoBelt") || "belt";
+                            const weaponLabel = UTILS.RESOLVE_STATIC_LANG("ammoWeapon") || "weapon";
                             if (hasOnWeapon && belt > 0) {
-                                countLabel = belt + " belt, " + onWeapon + " weapon";
+                                countLabel = belt + " " + beltLabel + ", " + onWeapon + " " + weaponLabel;
                             } else if (hasOnWeapon) {
-                                countLabel = onWeapon + " weapon";
+                                countLabel = onWeapon + " " + weaponLabel;
                             }
                             return {
                                 text: `${UTILS.GET_AMMO_TYPE_LABEL(ammoType)} (${countLabel})`,
@@ -2493,6 +2495,7 @@ $("document").ready(function () {
 
         if (event.data.action == "initiate") {
             LANGUAGE = event.data.language
+            UTILS.APPLY_STATIC_LANG();
             LuaConfig = event.data.config
             Config.UseGoldItem = LuaConfig.UseGoldItem;
             Config.AddGoldItem = LuaConfig.AddGoldItem;

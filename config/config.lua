@@ -1,6 +1,7 @@
 ---@class vorp_inventory_config
 CONFIG                     = CONFIG or {}
 
+-- "English" / "Francais" / "German" / "Italian" / "Spanish" / "Portugues_PT" / "Portugues_BR" / "Romanian" / "Nederlandse" / "Nynorsk" / "Turkish"
 CONFIG.LANGUAGE            = "English"
 
 CONFIG.DEV_MODE            = false   -- If your server is live set this to false

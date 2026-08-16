@@ -427,7 +427,10 @@ const HOTBAR = {
             $hud.addClass("hotbar-hud--editing");
             $hud.draggable({ containment: "window", scroll: false, cursor: "grabbing" });
             $("body").append(
-                '<div id="hotbar-edit-hint">DRAG HOTBAR &bull; ENTER TO SAVE &bull; ESC TO CANCEL</div>'
+                $("<div/>", { id: "hotbar-edit-hint" }).text(
+                    UTILS.RESOLVE_STATIC_LANG("hotbarEditHint") ||
+                    "DRAG HOTBAR \u2022 ENTER TO SAVE \u2022 ESC TO CANCEL"
+                )
             );
 
             $(document).on("keydown.hotbarEdit", function (e) {

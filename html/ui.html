@@ -2,6 +2,7 @@
 <html>
 
 <head>
+    <meta charset="utf-8">
     <meta name="author" content="">
     <title>Inventory HUD</title>
     <link rel="stylesheet" id="themonic-fonts-css" href="css/contextMenu.min.css" type="text/css" media="all" />
@@ -18,28 +19,30 @@
     <div id="inventoryHud">
         <div id="disabler"></div>
         <div class="inv-title-block" id="invTitleBlock">
-            <div id="title">Satchel</div>
+            <div id="title" data-lang="satchel">Satchel</div>
             <div class="inv-title-divider" aria-hidden="true"></div>
         </div>
         <div class='tooltip'
             style='display: none; position: absolute; padding: 10px; background-color: black; color: white; border-radius: 5px;'>
             Tooltip content</div>
-        <div class="item-groups-rail" aria-label="Item categories">
+        <div class="item-groups-rail" aria-label="Item categories" data-lang-aria="itemCategories">
             <div class="carouselWrapper carouselWrapper--item-groups">
                 <div class="carouselContainer" id="carousel1Container">
                     <div class="dropdownButtonContainer mainButton1" id="carousel1"></div>
-                    <div class="item-groups-nav" aria-label="Category navigation">
+                    <div class="item-groups-nav" aria-label="Category navigation" data-lang-aria="categoryNav">
                         <button type="button" class="carousel-control carousel-control--rail item-groups-nav-btn"
-                            aria-label="Previous category"
+                            aria-label="Previous category" data-lang-aria="previousCategory"
                             onclick="INVENTORY.MAIN.STEP_MAIN_GROUP(-1)">&#10094;</button>
-                        <div class="item-groups-nav-title" id="itemGroupsNavTitle">All</div>
+                        <div class="item-groups-nav-title" id="itemGroupsNavTitle" data-lang="inventoryall">All</div>
                         <button type="button" class="carousel-control carousel-control--rail item-groups-nav-btn"
-                            aria-label="Next category " onclick="INVENTORY.MAIN.STEP_MAIN_GROUP(1)">&#10095;</button>
+                            aria-label="Next category" data-lang-aria="nextCategory"
+                            onclick="INVENTORY.MAIN.STEP_MAIN_GROUP(1)">&#10095;</button>
                     </div>
                 </div>
             </div>
         </div>
-        <div id="inventoryFixedSlotsStrip" class="inventory-fixed-slots-strip" aria-label="Gunbelt, cash, gold"></div>
+        <div id="inventoryFixedSlotsStrip" class="inventory-fixed-slots-strip" aria-label="Gunbelt, cash, gold"
+            data-lang-aria="fixedSlots"></div>
         <div id="inventoryGridShell" class="inventory-grid-shell">
             <div id="inventoryElement"></div>
         </div>
@@ -58,30 +61,33 @@
         <div class="mainButtonContainer">
             <div class="mainButton-toolbar-group">
                 <button class="mainButton mainButton-toolbar mainButton-saddle" type="button" id="inventorySaddleBtn"
-                    title="Saddle" aria-label="Saddle">
+                    title="Saddle" aria-label="Saddle" data-lang-title="saddle" data-lang-aria="saddle">
                     <span class="mainButton-saddle__icon" aria-hidden="true"></span>
-                    <span class="mainButton-saddle__label">Saddle</span>
+                    <span class="mainButton-saddle__label" data-lang="saddle">Saddle</span>
                 </button>
                 <button class="mainButton mainButton-toolbar mainButton-attachments" type="button" style="display:none;"
-                    id="weaponAttachmentsOpenBtn" title="Attachments" aria-label="Attachments" aria-expanded="false">
+                    id="weaponAttachmentsOpenBtn" title="Attachments" aria-label="Attachments" aria-expanded="false"
+                    data-lang-title="attachmentsTitle" data-lang-aria="attachmentsTitle">
                     <span class="mainButton-attachments__icon" aria-hidden="true"></span>
-                    <span class="mainButton-attachments__label">Mods</span>
+                    <span class="mainButton-attachments__label" data-lang="mods">Mods</span>
                 </button>
                 <button class="mainButton mainButton-toolbar mainButton-craft" type="button" id="handCraftingOpenBtn"
-                    title="Hand craft" aria-label="Hand craft" aria-expanded="false">
+                    title="Hand craft" aria-label="Hand craft" aria-expanded="false"
+                    data-lang-title="handCraft" data-lang-aria="handCraft">
                     <span class="mainButton-craft__icon" aria-hidden="true"></span>
-                    <span class="mainButton-craft__label">Craft</span>
+                    <span class="mainButton-craft__label" data-lang="craft">Craft</span>
                 </button>
                 <button class="mainButton mainButton-toolbar mainButton-sort" type="button" id="inventorySortBtn"
-                    title="Sort" aria-label="Sort" aria-expanded="false">
+                    title="Sort" aria-label="Sort" aria-expanded="false"
+                    data-lang-title="sort" data-lang-aria="sort">
                     <span class="mainButton-sort__icon" aria-hidden="true"></span>
-                    <span class="mainButton-sort__label">Sort</span>
+                    <span class="mainButton-sort__label" data-lang="sort">Sort</span>
                 </button>
                 <div id="sortConfirmPopup" style="display:none; position:absolute; top:3vh; right:0; z-index:20000; padding:1.2vh 1vw; text-align:center; width:6vw;">
-                    <p style="font-family:'crock',serif; font-size:0.6vw; color:#f5f0e6; margin:0 0 0.8vh;">Sort inventory?</p>
+                    <p style="font-family:'crock',serif; font-size:0.6vw; color:#f5f0e6; margin:0 0 0.8vh;" data-lang="sortConfirm">Sort inventory?</p>
                     <div style="display:flex; gap:0.4vw; justify-content:center;">
-                        <button type="button" id="sortConfirmYes" style="font-family:'crock',serif; font-size:0.55vw; color:#f5f0e6; background:transparent; border:1px solid rgba(245,240,230,0.4); padding:0.3vh 0.5vw; float:none; border-radius:2px;">Yes</button>
-                        <button type="button" id="sortConfirmNo" style="font-family:'crock',serif; font-size:0.55vw; color:#f5f0e6; background:transparent; border:1px solid rgba(245,240,230,0.4); padding:0.3vh 0.5vw; float:none; border-radius:2px;">No</button>
+                        <button type="button" id="sortConfirmYes" style="font-family:'crock',serif; font-size:0.55vw; color:#f5f0e6; background:transparent; border:1px solid rgba(245,240,230,0.4); padding:0.3vh 0.5vw; float:none; border-radius:2px;" data-lang="yes">Yes</button>
+                        <button type="button" id="sortConfirmNo" style="font-family:'crock',serif; font-size:0.55vw; color:#f5f0e6; background:transparent; border:1px solid rgba(245,240,230,0.4); padding:0.3vh 0.5vw; float:none; border-radius:2px;" data-lang="no">No</button>
                     </div>
                 </div>
             </div>
@@ -105,15 +111,16 @@
             <div class="carouselWrapper1 carouselWrapper1--secondary-groups">
                 <div class="carouselContainer1 secondary-item-groups" id="staticCarouselContainer">
                     <div class="dropdownButtonContainer1" id="staticCarousel"></div>
-                    <div class="item-groups-nav item-groups-nav--secondary" aria-label="Category navigation">
+                    <div class="item-groups-nav item-groups-nav--secondary" aria-label="Category navigation"
+                        data-lang-aria="categoryNav">
                         <button type="button"
                             class="carousel-control carousel-control--rail item-groups-nav-btn secondary-item-groups-nav-btn"
-                            aria-label="Previous category"
+                            aria-label="Previous category" data-lang-aria="previousCategory"
                             onclick="INVENTORY.SECONDARY.ITEM_GROUPS_SELECTION(-1)">&#10094;</button>
-                        <div class="item-groups-nav-title" id="itemGroupsNavTitleSecond">All</div>
+                        <div class="item-groups-nav-title" id="itemGroupsNavTitleSecond" data-lang="inventoryall">All</div>
                         <button type="button"
                             class="carousel-control carousel-control--rail item-groups-nav-btn secondary-item-groups-nav-btn"
-                            aria-label="Next category"
+                            aria-label="Next category" data-lang-aria="nextCategory"
                             onclick="INVENTORY.SECONDARY.ITEM_GROUPS_SELECTION(1)">&#10095;</button>
                     </div>
                 </div>
@@ -127,7 +134,7 @@
             <div class="weapon-attachments-panel-head">
                 <span class="weapon-attachments-panel-title" id="weaponAttachmentsTitle">Attachments</span>
                 <button type="button" class="weapon-attachments-panel-close" id="weaponAttachmentsClose"
-                    aria-label="Close">&times;</button>
+                    aria-label="Close" data-lang-aria="inventoryclose">&times;</button>
             </div>
             <div id="weaponAttachmentsWeaponImg" class="weapon-attachments-weapon-wrap"></div>
             <div class="weapon-attachments-slots-heading" id="weaponAttachmentsSlotsLabel" hidden></div>
@@ -159,28 +166,28 @@
     <div id="inv-controls-hint" style="display:none;">
         <div id="inv-hint-secondary" class="inv-hint-group" style="display:none;">
             <div class="inv-hint-row">
-                <span class="kbd">Shift</span><span class="inv-hint-sep">+</span><span class="kbd">Click</span>
-                <span class="inv-hint-label">Move full stack to empty slot</span>
+                <span class="kbd">Shift</span><span class="inv-hint-sep">+</span><span class="kbd" data-lang="keyClick">Click</span>
+                <span class="inv-hint-label" data-lang="hintMoveFullEmpty">Move full stack to empty slot</span>
             </div>
             <div class="inv-hint-row">
-                <span class="kbd">Alt</span><span class="inv-hint-sep">+</span><span class="kbd">Drag</span>
-                <span class="inv-hint-label">Move half stack</span>
+                <span class="kbd">Alt</span><span class="inv-hint-sep">+</span><span class="kbd" data-lang="keyDrag">Drag</span>
+                <span class="inv-hint-label" data-lang="hintMoveHalf">Move half stack</span>
             </div>
             <div class="inv-hint-row">
-                <span class="kbd">Shift</span><span class="inv-hint-sep">+</span><span class="kbd">Drag</span>
-                <span class="inv-hint-label">Move full stack to chosen slot</span>
+                <span class="kbd">Shift</span><span class="inv-hint-sep">+</span><span class="kbd" data-lang="keyDrag">Drag</span>
+                <span class="inv-hint-label" data-lang="hintMoveFullChosen">Move full stack to chosen slot</span>
             </div>
         </div>
         <div id="inv-hint-main-only" class="inv-hint-group" style="display:none;">
             <div class="inv-hint-row">
-                <span class="kbd">Drag</span>
-                <span class="inv-hint-label">Drag items to any slot</span>
+                <span class="kbd" data-lang="keyDrag">Drag</span>
+                <span class="inv-hint-label" data-lang="hintDragAnySlot">Drag items to any slot</span>
             </div>
         </div>
         <div id="inv-hint-always" class="inv-hint-group">
             <div class="inv-hint-row">
                 <span class="kbd">Esc</span>
-                <span class="inv-hint-label">Close</span>
+                <span class="inv-hint-label" data-lang="inventoryclose">Close</span>
             </div>
         </div>
     </div>
@@ -188,13 +195,14 @@
     <div id="handCraftingPanel" class="hand-crafting-panel" style="display:none;" aria-hidden="true">
         <div class="hand-crafting-panel-inner">
             <div class="hand-crafting-panel-head">
-                <span class="hand-crafting-panel-title" id="handCraftingPanelTitle">Hand craft</span>
+                <span class="hand-crafting-panel-title" id="handCraftingPanelTitle" data-lang="handCraft">Hand craft</span>
                 <button type="button" class="hand-crafting-panel-close" id="handCraftingCloseBtn"
-                    aria-label="Close">&times;</button>
+                    aria-label="Close" data-lang-aria="inventoryclose">&times;</button>
             </div>
             <div class="hand-crafting-panel-body">
-                <aside class="hand-crafting-panel-sidebar" aria-label="Recipes">
-                    <div class="hand-crafting-panel-sidebar-title" id="handCraftingRecipeFieldLabel">Recipes<br>use scroll wheel to see more</div>
+                <aside class="hand-crafting-panel-sidebar" aria-label="Recipes" data-lang-aria="recipes">
+                    <div class="hand-crafting-panel-sidebar-title" id="handCraftingRecipeFieldLabel"><span
+                            data-lang="recipes">Recipes</span><br><span data-lang="recipesScrollHint">use scroll wheel to see more</span></div>
                     <div class="hand-crafting-panel-recipe-scroll-wrap">
                         <ul class="hand-crafting-panel-recipe-list" id="handCraftingRecipeList" role="listbox"></ul>
                     </div>
@@ -202,7 +210,7 @@
                 <div class="hand-crafting-panel-detail">
                     <div id="handCraftingSelectPrompt" class="hand-crafting-panel-select-prompt">
                         <span class="hand-crafting-panel-select-icon" aria-hidden="true"></span>
-                        <span>Select an item to craft</span>
+                        <span data-lang="selectItemToCraft">Select an item to craft</span>
                     </div>
                     <div class="hand-crafting-panel-preview">
                         <div class="hand-crafting-panel-reward-slot">
@@ -211,9 +219,10 @@
                         </div>
                         <p id="handCraftingDesc" class="hand-crafting-panel-desc"></p>
                     </div>
-                    <div class="hand-crafting-panel-needed-title">Required</div>
+                    <div class="hand-crafting-panel-needed-title" data-lang="required">Required</div>
                     <div id="handCraftingNeeded" class="hand-crafting-panel-needed"></div>
-                    <button type="button" id="handCraftingCraftBtn" class="hand-crafting-panel-craft" disabled>
+                    <button type="button" id="handCraftingCraftBtn" class="hand-crafting-panel-craft" disabled
+                        data-lang="craft">
                         Craft
                     </button>
                 </div>

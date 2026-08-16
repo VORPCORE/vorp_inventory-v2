@@ -971,7 +971,11 @@ local nuiService = {
 					attachmentsPartsTitle = LANG.attachmentsPartsTitle,
 					attachmentsTitle = LANG.attachmentsTitle,
 					attachmentsFooterHint = LANG.attachmentsFooterHint,
+					attachmentsDragWeaponHint = LANG.attachmentsDragWeaponHint,
+					inventoryall = LANG.inventoryall,
+					handcraftingNoRecipes = LANG.handcraftingNoRecipes,
 					labels = LANG.labels,
+					ui = LANG.ui,
 				},
 				config = {
 					UseGoldItem = CONFIG.INVENTORY_UI.ADD_GOLD_ITEM,

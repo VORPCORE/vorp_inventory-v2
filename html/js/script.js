@@ -409,6 +409,34 @@ const UTILS = {
         return Number.isFinite(n) ? Math.max(0, Math.floor(n)) : 0;
     },
 
+    // ui.html ships with its text baked in, in English. data-lang replaces the
+    // text, data-lang-title the tooltip and data-lang-aria the screen reader
+    // label. Keys resolve against LANGUAGE.ui first, then the flat LANGUAGE
+    // table, so an entry that already exists there is not duplicated.
+    RESOLVE_STATIC_LANG: function (key) {
+        if (!key || !LANGUAGE) return null;
+        const value = LANGUAGE.ui?.[key] ?? LANGUAGE[key];
+        return (value == null || value === "") ? null : String(value);
+    },
+
+    APPLY_STATIC_LANG: function () {
+        const targets = [
+            ["data-lang", function (el, text) { el.textContent = text; }],
+            ["data-lang-title", function (el, text) { el.title = text; }],
+            ["data-lang-aria", function (el, text) { el.setAttribute("aria-label", text); }],
+        ];
+
+        for (let i = 0; i < targets.length; i++) {
+            const attribute = targets[i][0];
+            const apply = targets[i][1];
+
+            document.querySelectorAll("[" + attribute + "]").forEach(function (el) {
+                const text = UTILS.RESOLVE_STATIC_LANG(el.getAttribute(attribute));
+                if (text !== null) apply(el, text);
+            });
+        }
+    },
+
 }
 
 const INVENTORY = {

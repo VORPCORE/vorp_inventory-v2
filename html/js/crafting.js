@@ -269,7 +269,7 @@ const CRAFTING = {
             $list.empty();
 
             if (!craftingRecipes.length) {
-                const emptyLab = (LANGUAGE && LANGUAGE.handcrafting_no_recipes) || "No recipes";
+                const emptyLab = (LANGUAGE && LANGUAGE.handcraftingNoRecipes) || "No recipes";
                 $list.append(
                     $("<li/>", {
                         class: "hand-crafting-panel-recipe-item hand-crafting-panel-recipe-item-empty",
