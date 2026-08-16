@@ -481,9 +481,8 @@ local Weapon <const> = LIB.Class:Create({
 				self:setUsed(true)
 				if self.used2 and CONFIG.DUAL_WIELD then
 					if isWeaponAGun and isWeaponOneHanded then
-						if not CONFIG.DUAL_WIELD_HOLSTER_NEEDED then
-							INVENTORY_SERVICE.APPLY_OFF_HAND_HOLSTER()
-						end
+						INVENTORY_SERVICE.APPLY_OFF_HAND_HOLSTER()
+
 
 						self:_addWeapon(self.name, 1, self.id)
 						if not CONFIG.MANUAL_WEAPON_RELOAD then

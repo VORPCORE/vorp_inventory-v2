@@ -173,15 +173,10 @@ local inventory <const> = {
 			Citizen.InvokeNative(0xCC8CA3E88256E58F, ped, false, true, true, true, false)
 			Citizen.InvokeNative(0xAAB86462966168CE, ped, true)
 		end
-
-		if not hasLeftHolster then -- NEED TO HAVE ONE BECAUSE WE CANT HAVE DUAL WITHOUT ONE
-			-- MAKE WEAPON NOT DUAL WIELD BECAUSE A HOLSTER IS NEEDED
-			if CONFIG.DUAL_WIELD_HOLSTER_NEEDED then
-
-			else
-				local gender = IsPedMale(CACHE.Ped) and "M" or "F"
-				applyShopItemToPed(CACHE.Ped, gender)
-			end
+		-- CONFIG WAS FALSE SO IF PLAYER DONT HAVE ONE WE NEED TO ADD IT OTHER WISE THE WEAPON BECOMES INVISIBLE = not fair
+		if not hasLeftHolster then
+			local gender = IsPedMale(CACHE.Ped) and "M" or "F"
+			applyShopItemToPed(CACHE.Ped, gender)
 		end
 	end,
 	GET_LOADOUT = function(loadout)
