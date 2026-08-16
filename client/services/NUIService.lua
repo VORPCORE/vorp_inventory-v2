@@ -23,10 +23,11 @@ end)
 
 local function isDualWielding()
 	-- IF EXISTS IN RIGHT HOLSTER OR IN HAND THEN WE WANT TO ADD DUAL
-	local _, weapon = GetCurrentPedWeapon(CACHE.Ped, false, 0, true) -- in right hand
-	local _, weapon2 = GetCurrentPedWeapon(CACHE.Ped, true, 2, true) -- in right holster
-
-	return weapon ~= `WEAPON_UNARMED` or not (weapon2 ~= `WEAPON_UNARMED` or weapon2 ~= 0)
+	local rightHandWeapon = GetPedCurrentHeldWeapon(CACHE.Ped)
+	local _, rightHandHolster = GetCurrentPedWeapon(CACHE.Ped, true, 2, true) -- in right holster
+	local isValid = IsWeaponRevolver(rightHandWeapon) == 1 or IsWeaponPistol(rightHandWeapon) == 1
+	local isValid2 = IsWeaponRevolver(rightHandHolster) == 1 or IsWeaponPistol(rightHandHolster) == 1
+	return isValid or isValid2
 end
 
 local function useWeapon(data)
@@ -104,7 +105,7 @@ local function useWeapon(data)
 		LocalPlayer.state:set(key, info, true)
 	end
 	TriggerServerEvent("vorpinventory:setUsedWeapon", weaponId, weapon:getUsed(), weapon:getUsed2())
-	print("weapon")
+
 	NUI_SERVICE.WEAPON.UPDATE_ICON(weapon:getId())
 end
 
@@ -1944,7 +1945,6 @@ local nuiService = {
 	},
 
 }
-
 
 
 NUI_SERVICE = nuiService
