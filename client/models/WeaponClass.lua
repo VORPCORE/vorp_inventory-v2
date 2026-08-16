@@ -869,13 +869,13 @@ function WEAPON:AddDualWield(weapons)
 		AddWardrobeInventoryItem("UPGRADE_OFFHAND_HOLSTER", 0x39E57B01)
 	end
 
-	if #weapons == 1 then
-		local weapon <const> = PLAYER_INVENTORY.WEAPONS[weapons[1]]
-		if weapon then
-			weapon:addWeaponDualWield(weapon:getName(), 0, weapon:getId())
-		end
-		return
-	end
+	-- if #weapons == 1 then
+	-- 	local weapon <const> = PLAYER_INVENTORY.WEAPONS[weapons[1]]
+	-- 	if weapon then
+	-- 		weapon:addWeaponDualWield(weapon:getName(), 0, weapon:getId())
+	-- 	end
+	-- 	return
+	-- end
 
 	local getUsed = {}
 	local getUsed2 = {}
