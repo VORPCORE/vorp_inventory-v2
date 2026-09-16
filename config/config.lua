@@ -108,6 +108,7 @@ CONFIG.HOTBAR       = {
 	TOGGLE_KEY = `INPUT_EMOTE_GREET`,                -- X -- Hotbar: show/hide
 	ALLOW = "all",                                   -- "all" is items and weapons , weapons only is "weapons" , "items" only is items
 	HOLD_KEY = `INPUT_SELECT_RADAR_MODE`,            -- key to hold to show hotbar (ALT) and use hotbar, cant use hotbar if you are not pressing and holding this key
+	DUAL_PRESS = true,						 		 -- if true ALT must be pressed  before using the number hotkeys, if false only the  keys needs to be pressed to use the hotbar
 	SLOT_KEYS = {
 		[1] = `INPUT_SELECT_QUICKSELECT_SIDEARMS_LEFT`, -- 1
 		[2] = `INPUT_SELECT_QUICKSELECT_DUALWIELD`,  -- 2
