@@ -1748,7 +1748,7 @@ local InventoryAPI = {
 				return respond(callback, 0)
 			end
 
-			local result <const> = DB_SERVICE.AWAIT.QUERY("SELECT COUNT(*) as total_count FROM loadout WHERE curr_inv = @invType AND weapon = @weapon_name", { invType = id, weapon_name = weapon_name })
+			local result <const> = DB_SERVICE.AWAIT.QUERY("SELECT COUNT(*) as total_count FROM loadout WHERE curr_inv = @invType AND name = @weapon_name", { invType = id, weapon_name = weapon_name })
 			if result[1] and result[1].total_count then
 				return respond(callback, tonumber(result[1].total_count))
 			end
