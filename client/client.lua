@@ -25,7 +25,7 @@ if CONFIG.HOTBAR.ENABLE then
                     hotbarSuppressed = false
                     NUI_SERVICE.HOTBAR.SET_VISIBLE(hotbarHudVisible)
                 end
-
+                
                 for i = 1, 5 do
                     if IsControlPressed(0, CONFIG.HOTBAR.HOLD_KEY) then
                         if CONFIG.HOTBAR.SHOW_WHEN_HOLD and not hotbarHudVisible then
@@ -40,10 +40,14 @@ if CONFIG.HOTBAR.ENABLE then
                         end
 
                         DisableControlAction(0, CONFIG.HOTBAR.SLOT_KEYS[i], true)
-                        if IsDisabledControlJustPressed(0, CONFIG.HOTBAR.SLOT_KEYS[i]) then
+                        if IsDisabledControlJustPressed(0, CONFIG.HOTBAR.SLOT_KEYS[i]) and CONFIG.HOTBAR.DUAL_PRESS then
                             NUI_SERVICE.HOTBAR.USE_ITEM(i, true)
                             break
                         end
+                    end
+                    if IsControlJustPressed(0, CONFIG.HOTBAR.SLOT_KEYS[i]) and not CONFIG.HOTBAR.DUAL_PRESS then
+                        NUI_SERVICE.HOTBAR.USE_ITEM(i, false)
+                        break
                     end
                 end
             end
