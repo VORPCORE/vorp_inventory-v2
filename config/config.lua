@@ -162,6 +162,7 @@ CONFIG.SFX          = {
 	}
 }
 
+
 CONFIG.PICKUPS      = {
 	USE_LIGHT = true,           -- If true, the pickup will have a light effect
 	KEY = `INPUT_INTERACT_ANIMAL`, -- G key PROMPT PICKUP

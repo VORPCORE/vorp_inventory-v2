@@ -1,16 +1,16 @@
-CONFIG                     = CONFIG or {}
+CONFIG                        = CONFIG or {}
 
-CONFIG.USE_GOLD_CURRENCY   = false -- you do not use gold currency leave this to false this will block any attempts to use gold
+CONFIG.USE_GOLD_CURRENCY      = false -- you do not use gold currency leave this to false this will block any attempts to use gold
 
 -- TO USE THE OPEN SADLE BUTTON ADD YOUR STABLE LOGIC HERE
 -- this is a server side function
 -- BY DEFAULT ITS USING VORP STABLES
-CONFIG.OPEN_SADDLE         = function(charid, model, entity, netid)
+CONFIG.OPEN_SADDLE            = function(charid, model, entity, netid)
     local id = ("%s_%s"):format(model, charid)
     return id -- return the inventory id here
 end
 
-CONFIG.NEW_PLAYER          = {
+CONFIG.NEW_PLAYER             = {
     ALLOW_ACTIONS = {
         ENABLE = false, -- if true, new players can give money or items to other players
         COOLDOWN = 300, -- in seconds 5m by default
@@ -24,17 +24,14 @@ CONFIG.NEW_PLAYER          = {
     }
 }
 
-CONFIG.DELETE_ITEM_EXPIRED = false -- if true items on use that are expired will be deleted (only works for items with degradation)
+CONFIG.DELETE_ITEM_EXPIRED    = false -- if true items on use that are expired will be deleted (only works for items with degradation)
 
-CONFIG.PICKUPS             = {
-
-    USE_TIMER = false,      -- if true it will add timer to delete pickups
-    TIMER = 10,             -- after this time pick up wll be deleted, IN MINUTES
-    DELETE_ON_DROP = false, -- if true then dropping items only deletes from inventory and box on the floor is not created
-}
+CONFIG.PICKUPS.USE_TIMER      = false -- if true it will add timer to delete pickups
+CONFIG.PICKUPS.TIMER          = 10    -- after this time pick up wll be deleted, IN MINUTES
+CONFIG.PICKUPS.DELETE_ON_DROP = false -- if true then dropping items only deletes from inventory and box on the floor is not created
 
 -- HOW MANY WEAPONS ALLOWED PER PLAYER FOR ITEMS IS IN VORP CORE CONFIG
-CONFIG.MAX_WEAPONS         = {
+CONFIG.MAX_WEAPONS            = {
     PLAYERS   = 10,
     JOBS      = { -- leave empty to use the players amount
         police = 10,
