@@ -27,7 +27,8 @@ if CONFIG.HOTBAR.ENABLE then
                 end
 
                 for i = 1, 5 do
-                    if IsControlPressed(0, CONFIG.HOTBAR.HOLD_KEY) then
+                    if IsControlPressed(0, CONFIG.HOTBAR.HOLD_KEY)
+                        or IsDisabledControlPressed(0, CONFIG.HOTBAR.HOLD_KEY) then
                         if CONFIG.HOTBAR.SHOW_WHEN_HOLD and not hotbarHudVisible then
                             hotbarHudVisible = true
                             hotbarSuppressed = false
