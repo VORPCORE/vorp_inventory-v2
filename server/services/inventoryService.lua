@@ -1123,6 +1123,7 @@ local InventoryService <const> = {
 			end
 
 			if CONFIG.PICKUPS.DELETE_ON_DROP then
+				TriggerClientEvent("vorpInventory:removeItem", source, data.id, data.amount)
 				SV_UTILS.PROCESS.REMOVE_USER(source)
 				return callback(true)
 			end
