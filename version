@@ -1,1 +1,8 @@
+<1.1>
+- added missing translation
+- fixed arrows pickup to be saved
+- fixed icon display on weapon when storing in secondary inv while equipped
+- fixed and improved the drop on delete (added individual variables for each weapon money items roll or gold) instead of all or nothing
+- fixed pick ups table (was being overrided by the server config)
+- many fixes were made in the past 5 months to list them all here, just update all files and compare config files
 <1.0>
