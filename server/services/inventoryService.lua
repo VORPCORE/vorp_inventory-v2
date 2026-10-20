@@ -2024,6 +2024,12 @@ local InventoryService <const> = {
 
 				for weaponId, weapon in pairs(USERS_WEAPONS[id]) do
 					if invData:isShared() or weapon.charId == sourceCharIdentifier then
+						if weapon:getUsed() or weapon:getUsed2() then
+							weapon:setUsed(false)
+							weapon:setUsed2(false)
+							DB_SERVICE.ASYNC.UPDATE('UPDATE loadout SET used = 0, used2 = 0 WHERE id = @id', { id = weaponId })
+						end
+
 						itemList[#itemList + 1] = WEAPON:Register({
 							id            = weaponId,
 							count         = 1,
@@ -2038,8 +2044,8 @@ local InventoryService <const> = {
 							custom_desc   = weapon.custom_desc,
 							ammo          = weapon:getAllAmmo(),
 							components    = weapon:getAllComponents(),
-							used          = weapon:getUsed(),
-							used2         = weapon:getUsed2(),
+							used          = false,
+							used2         = false,
 							weight        = weapon:getWeight(),
 						})
 					end
@@ -2499,14 +2505,16 @@ local InventoryService <const> = {
 					return CORE.NotifyObjective(_source, message, 2000)
 				end
 
-				local query = "UPDATE loadout SET identifier = '',curr_inv = @invId WHERE charidentifier = @charid AND id = @weaponId"
+				local query = "UPDATE loadout SET identifier = '', curr_inv = @invId, used = 0, used2 = 0 WHERE charidentifier = @charid AND id = @weaponId"
 				local params = { invId = invId, charid = sourceCharIdentifier, weaponId = item.id }
 				DB_SERVICE.ASYNC.UPDATE(query, params)
-				USERS_WEAPONS.default[item.id]:setCurrInv(invId)
-				USERS_WEAPONS[invId][item.id] = USERS_WEAPONS.default[item.id]
+				local weapon <const> = USERS_WEAPONS.default[item.id]
+				weapon:setCurrInv(invId)
+				weapon:setUsed(false)
+				weapon:setUsed2(false)
+				USERS_WEAPONS[invId][item.id] = weapon
 				USERS_WEAPONS.default[item.id] = nil
 				TriggerClientEvent("vorpCoreClient:subWeapon", _source, item.id)
-				local weapon <const> = USERS_WEAPONS[invId][item.id]
 				TriggerClientEvent("vorp_inventory:client:secondaryItemAdded", _source, {
 					id            = item.id,
 					name          = weapon:getName(),
@@ -2517,8 +2525,8 @@ local InventoryService <const> = {
 					custom_label  = weapon:getCustomLabel(),
 					custom_desc   = weapon:getCustomDesc(),
 					ammo          = weapon:getAllAmmo(),
-					used          = weapon:getUsed(),
-					used2         = weapon:getUsed2(),
+					used          = false,
+					used2         = false,
 				})
 				INVENTORY_SERVICE.LOGS.DISCORD(invId, item.name, amount, sourceName, "Move")
 				SV_UTILS.PROCESS.REMOVE_USER(_source)
