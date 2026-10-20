@@ -982,7 +982,7 @@ local InventoryAPI = {
 			if currentAmount + amount > maxAmount then
 				-- dont return because will break scripts im sure no one is listening for the return
 				local amountAdded = maxAmount - currentAmount
-				CORE.NotifyObjective(_source, "you can't hold that many added: " .. amountAdded .. " max is: " .. maxAmount)
+				CORE.NotifyObjective(_source, string.format(LANG.cantHoldThatManyAmmo, amountAdded, maxAmount))
 				--return respond(cb, false)
 			end
 

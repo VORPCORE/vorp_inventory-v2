@@ -303,7 +303,7 @@ if CONFIG.USE_WEAPON_DEGRADATION then
                                 DisablePlayerFiring(CACHE.Player, true)
 
                                 if IsDisabledControlJustPressed(0, `INPUT_ATTACK`) then
-                                    CORE.NotifyRightTip("Your weapon is degraded and cant be used", 5000)
+                                    CORE.NotifyRightTip(LANG.weaponDegradedCantUse, 5000)
                                 end
                             end
                         end

@@ -26,9 +26,9 @@ local Ammo <const> = {
                 AMMO_SERVICE.ADD_AMMO_TO_PED(PLAYER_AMMO_INFO.ammo)
             end
             if not isSource then
-                CORE.NotifyRightTip("you have received ammo for your weapons", 2000)
+                CORE.NotifyRightTip(LANG.receivedAmmoForWeapons, 2000)
             else
-                CORE.NotifyRightTip("you have transferred your ammo", 2000)
+                CORE.NotifyRightTip(LANG.transferredYourAmmo, 2000)
             end
         end
 
@@ -132,7 +132,7 @@ local Ammo <const> = {
         SetAmmoTypeForPedWeapon(CACHE.Ped, joaat(weaponName), joaat(ammoTypeName))
 
         NUI_SERVICE.INVENTORY.UPDATE_WEAPON(weaponId)
-        CORE.NotifyRightTip("New Ammo " .. (SHARED_DATA.AMMO_LABEL[ammoTypeName] or ammoTypeName) .. " type added to weapon", 4000)
+        CORE.NotifyRightTip(LANG.newAmmoTypeAddedToWeapon .. (SHARED_DATA.AMMO_LABEL[ammoTypeName] or ammoTypeName), 4000)
     end,
 }
 
@@ -250,7 +250,7 @@ else
             local maxAmmoInClip <const> = weapon:getDefaultClipSize()
             local ammoInWeapon <const> = GetAmmoInPedWeapon(CACHE.Ped, weaponHash)
             if ammoInWeapon >= weapon:getDefaultClipSize() then
-                return CORE.NotifyRightTip("max arrows in weapon reached", 2000)
+                return CORE.NotifyRightTip(LANG.maxArrowsInWeapon, 2000)
             end
 
             if ammoInBelt < maxAmmoInClip then
@@ -276,7 +276,7 @@ else
             NUI_SERVICE.INVENTORY.UPDATE_WEAPON(id)
             SendNUIMessage({ action = "updateammo", ammo = PLAYER_AMMO_INFO.ammo })
         else
-            CORE.NotifyRightTip("you do not have anymore arrows", 2000)
+            CORE.NotifyRightTip(LANG.noMoreArrows, 2000)
         end
     end
 
@@ -292,7 +292,7 @@ else
                 local ammoInWeapon <const> = GetAmmoInPedWeapon(CACHE.Ped, joaat(weapon:getName())) -- if is more than 0 has weapon in hand and is more than 0
                 if ammoInWeapon > 0 then
                     if ammoInWeapon >= weapon:getDefaultClipSize() then
-                        return CORE.NotifyRightTip("max knives in weapon reached", 2000)
+                        return CORE.NotifyRightTip(LANG.maxKnivesInWeapon, 2000)
                     end
                 end
 
@@ -503,7 +503,7 @@ else
 
     local function reloadWeapon()
         if IsPlayerFreeAiming(CACHE.Player) then
-            return CORE.NotifyRightTip("you cannot reload while aiming", 2000)
+            return CORE.NotifyRightTip(LANG.cannotReloadWhileAiming, 2000)
         end
 
         local attachPoints = isDualWielding() and { 0, 1 } or { 0 }
@@ -542,7 +542,7 @@ else
         until IsPedReloading(CACHE.Ped) or GetGameTimer() - startTime > 2000
         if GetGameTimer() - startTime > 2000 then
             TaskReloadWeapon(CACHE.Ped, false)
-            CORE.NotifyRightTip("Reload failed, reload again", 2000)
+            CORE.NotifyRightTip(LANG.reloadFailed, 2000)
         end
         repeat
             Wait(0)
@@ -685,7 +685,7 @@ else
         local weaponName <const> = data.weaponName
 
         local weapon <const> = PLAYER_INVENTORY.WEAPONS[weaponId]
-        if not weapon then return CORE.NotifyRightTip("Weapon not found", 2000) end
+        if not weapon then return CORE.NotifyRightTip(LANG.weaponNotFound, 2000) end
         if weapon:getName() ~= weaponName then
             return print("setWeaponAmmoType: weapon name mismatch")
         end
@@ -699,18 +699,18 @@ else
             end
         end
         if not isAllowed then
-            return CORE.NotifyRightTip("This ammo type does not fit this weapon", 4000)
+            return CORE.NotifyRightTip(LANG.ammoTypeDoesNotFit, 4000)
         end
 
         if not weapon:getUsed() and not weapon:getUsed2() then
-            return CORE.NotifyRightTip("Equip this weapon first", 2000)
+            return CORE.NotifyRightTip(LANG.equipWeaponFirst, 2000)
         end
 
         local ammoTypeHash <const> = GetPedAmmoTypeFromWeapon(CACHE.Ped, joaat(weaponName))
         --WEAPON ALREADY HAS THIS AMMO TYPE SET
         if ammoTypeHash == joaat(ammoTypeName) then
             SetAmmoTypeForPedWeapon(CACHE.Ped, joaat(weaponName), joaat(ammoTypeName))
-            CORE.NotifyRightTip("Ammo switched to " .. SHARED_DATA.AMMO_LABEL[ammoTypeName] or ammoTypeName, 4000)
+            CORE.NotifyRightTip(LANG.ammoSwitchedTo .. (SHARED_DATA.AMMO_LABEL[ammoTypeName] or ammoTypeName), 4000)
             return
         end
 
@@ -720,12 +720,12 @@ else
             -- WEAPON HAS AMO ADD THE AMMO TO WEAPON AND SET AMMO TYPE
             SetAmmoTypeForPedWeapon(CACHE.Ped, joaat(weaponName), joaat(ammoTypeName))
             SetPedAmmoByType(CACHE.Ped, joaat(ammoTypeName), amount)
-            CORE.NotifyRightTip("Ammo type set to " .. SHARED_DATA.AMMO_LABEL[ammoTypeName] or ammoTypeName, 4000)
+            CORE.NotifyRightTip(LANG.ammoTypeSetTo .. (SHARED_DATA.AMMO_LABEL[ammoTypeName] or ammoTypeName), 4000)
         else
             -- WEAPON AND WEAPON DATA DOESN'T HAVE THIS AMMO TYPE SO TAKE FROM BELT AND ADD TO WEAPON
             local ammoInBelt <const> = getAmmoFromGunbelt(ammoTypeName)
             if ammoInBelt <= 0 then
-                return CORE.NotifyRightTip("You have no ammo of this type in your gunbelt", 4000)
+                return CORE.NotifyRightTip(LANG.noAmmoOfThisTypeInGunbelt, 4000)
             end
 
             TriggerServerEvent("vorpinventory:setWeaponAmmoType", {
@@ -748,7 +748,7 @@ else
         local function canAddToGunbelt(ammoTypeName, amount)
             local maxAmmoInBelt <const> = SHARED_DATA.MAX_AMMO_BELT[ammoTypeName]
             if amount > maxAmmoInBelt then
-                CORE.NotifyRightTip("Gunbelt cant hold this much ammo, max is : " .. maxAmmoInBelt, 2000)
+                CORE.NotifyRightTip(LANG.gunbeltCantHoldAmmo .. maxAmmoInBelt, 2000)
                 return false
             end
             return true
@@ -765,7 +765,7 @@ else
                     end
                     TriggerServerEvent("vorpinventory:AddBulletFromWeapon", "AMMO_THROWING_KNIVES", ammoInWeapon, weaponId:getId())
                 else
-                    CORE.NotifyRightTip("You cannot unload to gunbelt as it has no ammo", 2000)
+                    CORE.NotifyRightTip(LANG.cannotUnloadGunbeltNoAmmo, 2000)
                 end
             end
             return
@@ -773,7 +773,7 @@ else
 
 
         if not isWeaponAGun(joaat(weaponName)) then
-            return CORE.NotifyRightTip("You cannot remove bullets from a non-gun weapon", 2000)
+            return CORE.NotifyRightTip(LANG.cannotRemoveBulletsNonGun, 2000)
         end
 
         if not CACHE.IsDead and CACHE.Weapon ~= `WEAPON_UNARMED` and IS_INV_OPEN then
@@ -791,7 +791,7 @@ else
                 amount = GetAmmoInPedWeapon(CACHE.Ped, joaat(weaponId:getName()))
             end
 
-            if amount == 0 then return CORE.NotifyRightTip("You cannot unload to gunbelt as it has no ammo", 2000) end
+            if amount == 0 then return CORE.NotifyRightTip(LANG.cannotUnloadGunbeltNoAmmo, 2000) end
             -- can we add more than whatthe belt can hold?
             if not canAddToGunbelt(ammoTypeName, amount) then
                 return
@@ -817,7 +817,7 @@ else
         end
 
         if not isWeaponAGun(joaat(weaponName)) then
-            return CORE.NotifyRightTip("You cannot reload a non-gun weapon", 2000)
+            return CORE.NotifyRightTip(LANG.cannotReloadNonGun, 2000)
         end
 
         if CACHE.Weapon == `WEAPON_UNARMED` then
@@ -863,7 +863,7 @@ else
                     SetPedAmmo(CACHE.Ped, weaponType, 0)
                     RemoveWeaponFromPed(CACHE.Ped, weaponType, true, 0)
                     TriggerServerEvent("vorpinventory:pickUpThrowableWeapon", weaponName)
-                    CORE.NotifyRightTip("You picked up a " .. weaponLabel, 4000)
+                    CORE.NotifyRightTip(LANG.pickedUpWeapon .. weaponLabel, 4000)
                     return
                 else
                     local knivesAmmo = { [`AMMO_THROWING_KNIVES`] = true }
@@ -892,7 +892,7 @@ else
                                 -- to update server on cached ammo because these dont behave like bullets its done above already
                                 WEAPONS_UPDATE[weaponId] = { ammoTypeName = ammoName, fired = quantity }
                                 local ammoLabel <const> = SHARED_DATA.AMMO_LABEL[ammoName] or ammoName
-                                CORE.NotifyRightTip("You picked up " .. ammoLabel, 4000)
+                                CORE.NotifyRightTip(LANG.pickedUpAmmo .. ammoLabel, 4000)
                             else
                                 -- must add the weapon to the inventory
                                 TriggerServerEvent("vorpinventory:pickUpThrowableWeapon", GetWeaponName(weaponUsed))
@@ -939,7 +939,7 @@ else
                     NUI_SERVICE.INVENTORY.UPDATE_WEAPON(weaponId)
                     -- no need to update cache server bow arrows behave like bullets its done above already
                     local ammoLabel <const> = SHARED_DATA.AMMO_LABEL[ammoName] or ammoName
-                    CORE.NotifyRightTip("You picked up " .. ammoLabel, 4000)
+                    CORE.NotifyRightTip(LANG.pickedUpAmmo .. ammoLabel, 4000)
                 end
             end
         end, true)
@@ -978,7 +978,7 @@ else
                         if weapon then
                             weapon:setUsed(false, true)
                             TriggerServerEvent("vorpinventory:removeLasso", weaponId, weapon:getName())
-                            CORE.NotifyRightTip("Lasso was removed from your inventory", 2000)
+                            CORE.NotifyRightTip(LANG.lassoRemoved, 2000)
                             RemoveWeaponFromPed(CACHE.Ped, joaat(weapon:getName()), true, 0)
                         end
                     end

@@ -61,7 +61,7 @@ local function useWeapon(data)
 			-- PLAYER NEEDS TO HAVE THE HOLSTER IN THE LEFT HAND TO DUAL WIELD
 			local hasLeftHolster = INVENTORY_SERVICE.HAS_LEFT_HOLSTER()
 			if not hasLeftHolster then
-				CORE.NotifyRightTip("You need to have a left holster to dual wield", 5000)
+				CORE.NotifyRightTip(LANG.needLeftHolsterToDualWield, 5000)
 				return
 			end
 		end
@@ -1939,7 +1939,7 @@ local nuiService = {
 				NUI_SERVICE.INVENTORY.CLOSE()
 				TriggerServerEvent("vorp_inventory:Server:SaddleOpen", netId)
 			else
-				CORE.NotifyObjective("You are not on a horse", 5000)
+				CORE.NotifyObjective(LANG.notOnHorse, 5000)
 			end
 		end,
 	},

@@ -1300,7 +1300,6 @@ local InventoryService <const> = {
 			SV_UTILS.PROCESS.REMOVE_USER(source)
 			return callback(true)
 		end,
-
 	},
 
 	ITEM = {
@@ -1352,10 +1351,10 @@ local InventoryService <const> = {
 				if isExpired then
 					local canUseExpired = arguments.item.metadata?.useExpired or SERVER_ITEMS[itemName]?.useExpired
 					if not canUseExpired then
-						local text = "Item is expired and can't be used"
+						local text = LANG.itemExpiredCantUse
 						if CONFIG.DELETE_ITEM_EXPIRED then
 							INVENTORY_API.MAIN.SUB_ITEM_BY_ID(_source, item:getId())
-							text = "Item is expired and can't be used, item was removed from your inventory"
+							text = LANG.itemExpiredRemoved
 						end
 						CORE.NotifyRightTip(_source, text, 3000)
 						return
@@ -1668,7 +1667,7 @@ local InventoryService <const> = {
 			if not userAmmoData then return print("user ammo data not found :", _source) end
 
 			if not userAmmoData.ammo[ammotype] then
-				CORE.NotifyObjective(_source, "You can't unload your weapon because your gunbelt does not have the ammo type,to store ammo, your belt must have the ammotype", 2000);
+				CORE.NotifyObjective(_source, LANG.cantUnloadNoAmmoTypeInBelt, 2000);
 				return
 			end
 
