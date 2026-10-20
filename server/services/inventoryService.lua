@@ -1044,7 +1044,7 @@ local InventoryService <const> = {
 				return callback(false)
 			end
 
-			if CONFIG.PICKUPS.DELETE_ON_DROP then
+			if CONFIG.PICKUPS.DELETE_ON_DROP.WEAPON then
 				INVENTORY_API.MAIN.DELETE_WEAPON(source, data.id)
 				SV_UTILS.PROCESS.REMOVE_USER(source)
 				return callback(true)
@@ -1122,7 +1122,7 @@ local InventoryService <const> = {
 				return callback(false)
 			end
 
-			if CONFIG.PICKUPS.DELETE_ON_DROP then
+			if CONFIG.PICKUPS.DELETE_ON_DROP.ITEM then
 				TriggerClientEvent("vorpInventory:removeItem", source, data.id, data.amount)
 				SV_UTILS.PROCESS.REMOVE_USER(source)
 				return callback(true)
@@ -1167,6 +1167,12 @@ local InventoryService <const> = {
 			end
 
 			character.removeCurrency(0, data.amount)
+
+			if CONFIG.PICKUPS.DELETE_ON_DROP.MONEY then
+				SV_UTILS.PROCESS.REMOVE_USER(source)
+				return callback(true)
+			end
+
 			local uid <const> = SV_UTILS.GENERATE_UNIQUE_ID()
 			TriggerClientEvent("vorpInventory:shareMoneyPickupClient", -1, data.handle, data.amount, data.position, uid, 1, data.rotation)
 
@@ -1211,6 +1217,12 @@ local InventoryService <const> = {
 			end
 
 			character.removeCurrency(1, data.amount)
+
+			if CONFIG.PICKUPS.DELETE_ON_DROP.GOLD then
+				SV_UTILS.PROCESS.REMOVE_USER(source)
+				return callback(true)
+			end
+
 			local uid <const> = SV_UTILS.GENERATE_UNIQUE_ID()
 			TriggerClientEvent("vorpInventory:shareGoldPickupClient", -1, data.handle, data.amount, data.position, uid, 1, data.rotation)
 
@@ -1256,6 +1268,12 @@ local InventoryService <const> = {
 			end
 
 			character.removeCurrency(2, data.amount)
+
+			if CONFIG.PICKUPS.DELETE_ON_DROP.ROLL then
+				SV_UTILS.PROCESS.REMOVE_USER(source)
+				return callback(true)
+			end
+
 			local uid <const> = SV_UTILS.GENERATE_UNIQUE_ID()
 			TriggerClientEvent("vorpInventory:shareRollPickupClient", -1, data.handle, data.amount, data.position, uid, 1, data.rotation)
 

@@ -28,7 +28,13 @@ CONFIG.DELETE_ITEM_EXPIRED    = false -- if true items on use that are expired w
 
 CONFIG.PICKUPS.USE_TIMER      = false -- if true it will add timer to delete pickups
 CONFIG.PICKUPS.TIMER          = 10    -- after this time pick up wll be deleted, IN MINUTES
-CONFIG.PICKUPS.DELETE_ON_DROP = false -- if true then dropping items only deletes from inventory and box on the floor is not created
+CONFIG.PICKUPS.DELETE_ON_DROP = { -- if true then dropping only deletes them and a box on the floor is not created
+    ITEM   = false,
+    WEAPON = false,
+    MONEY  = false,
+    GOLD   = false,
+    ROLL   = false,
+}
 
 -- HOW MANY WEAPONS ALLOWED PER PLAYER FOR ITEMS IS IN VORP CORE CONFIG
 CONFIG.MAX_WEAPONS            = {
