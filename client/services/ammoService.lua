@@ -586,7 +586,6 @@ else
     CreateThread(function()
         repeat Wait(5000) until LocalPlayer.state.IsInSession
 
-
         while true do
             local sleep = 800
 
@@ -601,12 +600,12 @@ else
                     local isThrowable <const> = IsWeaponThrowable(wephash) == 1
 
                     if not isThrowable and not ismelee then
-                        local isReloading <const> = IsPedReloading(playerPedId)
-                        if isReloading then
+                        local reloading <const> = IsPedReloading(playerPedId)
+                        if reloading then
                             dualWieldLastClipAmmo = {}
                             lastAmmoTypeHash = nil
                         end
-                        if not isReloading then
+                        if not reloading then
                             sleep = 0
                             local dualWielding <const> = isDualWielding()
                             local weaponObject <const> = not dualWielding and GetPedWeaponObject(playerPedId, false)
@@ -628,7 +627,6 @@ else
                                         if weaponId > 0 then
                                             userWeapon = PLAYER_INVENTORY.WEAPONS[weaponId]
                                             if userWeapon then
-                                          
                                                 userWeapon:subAmmoFromClip(ammoTypeName, 1)
                                                 NUI_SERVICE.INVENTORY.UPDATE_WEAPON(weaponId)
                                             end
@@ -736,6 +734,7 @@ else
     end)
 
     RegisterNUICallback("removeBullets", function(data, cb)
+        cb("ok")
         local weaponId <const> = PLAYER_INVENTORY.WEAPONS[data.id]
         if not weaponId then return print("weapon not found") end
         local weaponName <const> = weaponId:getName()
@@ -937,7 +936,7 @@ else
 
                     userWeapon:addAmmoToClip(ammoName, quantity, true)
                     NUI_SERVICE.INVENTORY.UPDATE_WEAPON(weaponId)
-                    -- no need to update cache server bow arrows behave like bullets its done above already
+                    TriggerServerEvent("vorpinventory:weaponPickedUpAmmo", { weaponId = weaponId, ammoType = ammoName, amount = quantity })
                     local ammoLabel <const> = SHARED_DATA.AMMO_LABEL[ammoName] or ammoName
                     CORE.NotifyRightTip(LANG.pickedUpAmmo .. ammoLabel, 4000)
                 end

@@ -1629,6 +1629,30 @@ local InventoryService <const> = {
 			userAmmoData.ammo[ammoType] = math.max(0, userAmmoData.ammo[ammoType] - amount)
 		end,
 
+
+		PICKED_UP_AMMO = function(data)
+			local _source <const> = source
+			if type(data) ~= "table" then return end
+
+			local character <const> = getCharacter(_source)
+			if not character then return end
+
+			local weaponId <const> = tonumber(data.weaponId)
+			local amount <const> = tonumber(data.amount)
+			local ammoType <const> = data.ammoType
+			if amount ~= 1 then return end
+
+			local weapon <const> = USERS_WEAPONS.default[weaponId]
+			if not weapon then return end
+			if weapon:getPropietary() ~= character.identifier or weapon:getCharId() ~= character.charIdentifier then return end
+			if weapon:getCurrInv() ~= "default" then return end
+			if not weapon:getUsed() and not weapon:getUsed2() then return end
+
+			if not weapon:hasAmmoType(ammoType) then return end
+
+			weapon:addAmmoToClip(ammoType, amount)
+		end,
+
 		SET_AMMO_TYPE = function(data)
 			local _source <const> = source
 			local weaponId <const> = data.weaponId
