@@ -180,6 +180,7 @@ local inventory <const> = {
 		end
 	end,
 	GET_LOADOUT = function(loadout)
+		AMMO_SERVICE.AMMO_TOGGLE(false)
 		RemoveAllPedWeapons(CACHE.Ped, true, true)
 		Wait(1000)
 
@@ -246,6 +247,11 @@ local inventory <const> = {
 		end
 
 		Wait(2000)
+		if not CONFIG.MANUAL_WEAPON_RELOAD then
+			local ammoInfo = CORE.Callback.TriggerAwait("vorp_inventory:callback:GetAmmoInfo")
+		    if ammoInfo and ammoInfo.ammo then AMMO_SERVICE.ADD_AMMO_TO_PED(ammoInfo.ammo) end
+		end
+		AMMO_SERVICE.AMMO_TOGGLE(true)
 		if CONFIG.USE_WEAPON_DEGRADATION then
 			-- need another loop because of get status method
 			local weaponsToSetStatus <const> = {}

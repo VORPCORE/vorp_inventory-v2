@@ -9,7 +9,6 @@ local EVENT <const>     = LIB.Events
 
 local Ammo <const> = {
     ADD_AMMO_TO_PED = function(ammoData)
-        Wait(2000)
         for ammoType, ammo in pairs(ammoData) do
             if ammo > 0 then
                 SetPedAmmoByType(CACHE.Ped, joaat(ammoType), ammo)
@@ -147,7 +146,7 @@ if not CONFIG.MANUAL_WEAPON_RELOAD then
         while true do
             local sleep = 500
             -- this thread is to remove ammo one by one so we dont loose the ammo that is on the weapon if we diconnect
-            if not IS_INV_OPEN and PLAYER_AMMO_INFO.ammo and not CACHE.IsDead then
+            if not IS_INV_OPEN and PLAYER_AMMO_INFO.ammo and not CACHE.IsDead and canUpdateAmmo then
                 local playerPedId <const> = CACHE.Ped
                 local isArmed <const> = IsPedArmed(playerPedId, 4) == 1
                 local wephash <const> = GetPedCurrentHeldWeapon(playerPedId)
