@@ -996,9 +996,7 @@ local InventoryAPI = {
 
 			TriggerClientEvent("vorpinventory:recammo", _source, USERS_AMMO_DATA[_source], not CONFIG.MANUAL_WEAPON_RELOAD)
 
-			local query1 = 'UPDATE characters SET ammo = @ammo WHERE charidentifier = @charidentifier'
-			local params1 <const> = { charidentifier = charidentifier, ammo = json.encode(ammo) }
-			DB_SERVICE.ASYNC.UPDATE(query1, params1)
+			INVENTORY_SERVICE.AMMO.SAVE(_source)
 
 			return respond(cb, true)
 		end,

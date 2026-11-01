@@ -596,6 +596,7 @@ local nuiService = {
 			if CONFIG.HOTBAR.ENABLE then
 				NUI_SERVICE.HOTBAR.SEND_UPDATE()
 			end
+			AMMO_LOADED = true
 		end,
 
 		DISABLE = function(param)

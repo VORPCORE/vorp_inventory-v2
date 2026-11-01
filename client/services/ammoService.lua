@@ -5,9 +5,9 @@ local UPDATE_AMMO_CACHE = {}
 local canUpdateAmmo     = true
 local LIB <const>       = Import "events"
 local EVENT <const>     = LIB.Events
+AMMO_LOADED             = false
 
-
-local Ammo <const> = {
+local Ammo <const>      = {
     ADD_AMMO_TO_PED = function(ammoData)
         Wait(2000)
         for ammoType, ammo in pairs(ammoData) do
@@ -136,13 +136,14 @@ local Ammo <const> = {
     end,
 }
 
-AMMO_SERVICE       = Ammo
+AMMO_SERVICE            = Ammo
 
 
 if not CONFIG.MANUAL_WEAPON_RELOAD then
     --* AMMO SAVING THREAD
     CreateThread(function()
         repeat Wait(5000) until LocalPlayer.state.IsInSession
+        repeat Wait(1000) until AMMO_LOADED
 
         while true do
             local sleep = 500
