@@ -179,6 +179,8 @@ if not CONFIG.MANUAL_WEAPON_RELOAD then
     end)
 
     CreateThread(function()
+        repeat Wait(5000) until LocalPlayer.state.IsInSession
+        repeat Wait(1000) until AMMO_LOADED
         while true do
             local sleep = 15000
             if not CACHE.IsDead then
@@ -586,6 +588,7 @@ else
 
     CreateThread(function()
         repeat Wait(5000) until LocalPlayer.state.IsInSession
+        repeat Wait(1000) until AMMO_LOADED
 
         while true do
             local sleep = 800
@@ -658,6 +661,7 @@ else
 
     CreateThread(function()
         repeat Wait(5000) until LocalPlayer.state.IsInSession
+        repeat Wait(1000) until AMMO_LOADED
 
         while true do
             local sleep = 15000
