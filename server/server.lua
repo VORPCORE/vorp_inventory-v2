@@ -195,7 +195,7 @@ if CONFIG.USE_RELOAD_SPEEDS then
         elseif weaponName == "WEAPON_PISTOL_MAUSER" then
             extraXml = [[
            <ShortArmHolsterDOF value="2" />]]
-        elseif weaponName == "WEAPON_SNIPERRIFLE_CARCANO" then
+        elseif weaponName == "WEAPON_SNIPERRIFLE_CARCANO" or weaponName == "WEAPON_SNIPERRIFLE_ROLLINGBLOCK" then
             -- we remove a flag to allow toggle scope for carcano credits to mosquitoman
             extraXml = [[
             <WeaponFlags>
